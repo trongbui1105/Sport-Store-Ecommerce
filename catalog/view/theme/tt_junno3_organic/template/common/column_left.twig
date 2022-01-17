@@ -1,0 +1,12 @@
+{% if modules or use_filter %}
+<aside id="column-left" class="col-sm-3 col-xs-12">
+  <div class="col-order-inner">
+  {% if use_filter %}
+    {{ filter_section }}
+  {% endif %}
+  {% for module in modules %}
+  {{ module }}
+  {% endfor %}
+  </div>
+</aside>
+{% endif %}

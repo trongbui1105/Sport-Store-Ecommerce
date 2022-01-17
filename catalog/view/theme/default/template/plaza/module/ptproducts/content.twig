@@ -1,0 +1,108 @@
+{% if layout_type == "grid" %}
+    {# Grid content #}
+    <div class="image {% if rotate_image %}rotate-image-container{% endif %}">
+        <a href="{{ href }}">
+            {% if show_label %}
+                {% if special %}
+                    <span class="pro-label sale">{{ text_sale }}</span>
+                {% else %}
+                    {% if is_new %}
+                        <span class="pro-label new">{{ text_new }}</span>
+                    {% endif %}
+                {% endif %}
+            {% endif %}
+            {% if rotate_image %}
+                <img src="{{ rotate_image }}" alt="{{ name }}" title="{{ name }}" class="img-responsive img-rotate-image" />
+            {% endif %}
+            <img src="{{ thumb }}" alt="{{ name }}" title="{{ name }}" class="img-responsive img-mod-{{ section_id }}-{{ product_id }}" />
+            {% if swatches_images %}
+                <input type="hidden" value="{{ thumb }}" class="img-default-{{ section_id }}-{{ product_id }}" />
+                {% for s_image in swatches_images %}
+                    <input type="hidden" value="{{ s_image.image }}" class="img-swatch-{{ section_id }}-{{ product_id }}-{{ s_image.product_option_value_id }}" />
+                {% endfor %}
+            {% endif %}
+        </a>
+        {% if show_quickview %}
+            <button type="button" title="{{ name }}" onclick="ptquickview.ajaxView('{{ href }}')"><i class="fa fa-search-plus"></i></button>
+        {% endif %}
+    </div>
+    <div class="caption">
+        <div class="product-options">
+            {% if options %}
+                {% for option in options %}
+                    <ul class="ul-swatches-colors">
+                        {% for option_value in option.product_option_value %}
+                            <li class="swatches-options">
+                                <a href="javascript:void(0);" onclick="swatches.changeModuleSwatches($(this));" title="{{ option_value.name }}"
+                                   style="{% if option_value.image %} width: 14px; height: 14px;
+																		background-image: url('{{ option_value.image }}') {% endif %}"
+                                   data-module-id="{{ section_id }}"
+                                   data-product-id="{{ product_id }}"
+                                   data-product-option-value-id="{{ option_value.product_option_value_id }}">{% if not option_value.image %} {{ option_value.name }} {% endif %}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endfor %}
+            {% endif %}
+        </div>
+        <h4><a href="{{ href }}">{{ name }}</a></h4>
+        {% if show_description and description %}
+            <p>{{ description }}</p>
+        {% endif %}
+
+        {% if rating %}
+            <div class="rating">
+                {% for i in 5 %}
+                    {% if rating < i %}
+                        <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-2x"></i></span>
+                    {% else %}
+                        <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i></span>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% if show_price and price %}
+            <p class="price">
+                {% if not special %}
+                    {{ price }}
+                {% else %}
+                    <span class="price-new">{{ special }}</span> <span class="price-old">{{ price }}</span>
+                {% endif %}
+                {% if tax %}
+                    <span class="price-tax">{{ text_tax }} {{ tax }}</span>
+                {% endif %}
+            </p>
+        {% endif %}
+
+        {% if show_countdown and date_end %}
+            <div class="countdown-box countdown-product-{{ product_id }}" data-id="{{ product_id }}" data-date="{{ date_end }}">
+                <span class="day"></span> {{ text_day }}
+                <span class="hour"></span> {{ text_hour }}
+                <span class="min"></span> {{ text_min }}
+                <span class="sec"></span> {{ text_sec }}
+            </div>
+        {% endif %}
+    </div>
+    <div class="button-group">
+        {% if show_cart %}
+            <button type="button" onclick="cart.add('{{ product_id }}');"><i class="fa fa-shopping-cart"></i> <span class="hidden-xs hidden-sm hidden-md">{{ button_cart }}</span></button>
+        {% endif %}
+
+        {% if show_wishlist %}
+            <button type="button" data-toggle="tooltip" title="{{ button_wishlist }}" onclick="wishlist.add('{{ product_id }}');"><i class="fa fa-heart"></i></button>
+        {% endif %}
+
+        {% if show_compare %}
+            <button type="button" data-toggle="tooltip" title="{{ button_compare }}" onclick="compare.add('{{ product_id }}');"><i class="fa fa-exchange"></i></button>
+        {% endif %}
+    </div>
+{% endif %}
+
+{% if layout_type == "list" %}
+    {# List content #}
+{% endif %}
+
+{% if layout_type == "other" %}
+    {# Other content #}
+{% endif %}

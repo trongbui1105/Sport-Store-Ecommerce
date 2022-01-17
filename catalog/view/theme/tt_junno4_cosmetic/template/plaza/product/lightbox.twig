@@ -1,0 +1,28 @@
+<script>
+	$( window ).resize(function() {
+		var screenheight = $( window ).height();
+		$('.mySlides img').css('max-height', screenheight);
+		
+	});
+	var screenheight = $( window ).height();
+	$('.mySlides img').css('max-height', screenheight);
+</script>
+{% if has_images %}
+	<span class="close cursor" onclick="ptzoom.closeLightBox()"></span>
+    <div class="lightbox-content">
+        {% set i = 1 %}
+        {% for image in images %}
+            <div class="mySlides">
+                <div class="numbertext">{{ i }} / {{ images|length }}</div>
+                <a onclick="ptzoom.plusSlides(1)" ><img src="{{ image.src }}" alt=""></a>
+            </div>
+            {% set i = i + 1 %}
+        {% endfor %}
+		<span class="close cursor" onclick="ptzoom.closeLightBox()"></span>
+    </div>
+
+    <a class="prev" onclick="ptzoom.plusSlides(-1)"><i class="ion-chevron-left"></i></a>
+    <a class="next" onclick="ptzoom.plusSlides(1)"><i class="ion-chevron-right"></i></a>
+{% else %}
+    <div class="lightbox-content">No Image Data</div>
+{% endif %}

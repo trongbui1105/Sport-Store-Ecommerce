@@ -1,0 +1,95 @@
+<div class="featured-categories-container dv-container">
+    <div class="dvmodule-title"><h2>{{ title }}</h2></div>
+    <div class="dv-content">
+        {% if use_slider %}
+            <div class="swiper-viewport">
+                <div class="featured-categories-content swiper-container">
+                    <div class="swiper-wrapper">
+                        {% for category in categories %}
+                            <div class="swiper-slide category-content">
+                                {% if use_second_img %}
+                                    <img src="{{ category.secondary_image }}" alt="{{ category.name }}" />
+                                {% endif %}
+                                <h4 class="name"><a href="{{ category.href }}">{{ category.name }}</a></h4>
+                                {% if show_cate_des and category.description %}
+                                    <p class="category-description">{{ category.description }}</p>
+                                {% endif %}
+                                {% if show_child %}
+                                    {% if category.children %}
+                                        {% set child_count = 0 %}
+                                        <ul class="child-featured-categories">
+                                            {% for childcate in category.children %}
+                                                {% if child_count < child_number %}
+                                                    <li><a href="{{ childcate.href }}">{{ childcate.name }}</a></li>
+                                                {% endif %}
+                                                {% set child_count = child_count + 1 %}
+                                            {% endfor %}
+                                        </ul>
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% if slide_settings.shownav %}
+                    <div class="swiper-pagination fcategory-pagination"></div>
+                {% endif %}
+
+                {% if slide_settings.shownextback %}
+                    <div class="swiper-pager">
+                        <div class="swiper-button-next"></div>
+                        <div class="swiper-button-prev"></div>
+                    </div>
+                {% endif %}
+            </div>
+
+            <script>
+                $(document).ready(function() {
+                    $(".featured-categories-content").swiper({
+                        spaceBetween: 20,
+                        {% if slide_settings.shownav %}
+                        pagination: '.fcategory-pagination',
+                        paginationClickable: true,
+                        {% endif %}
+                        {% if slide_settings.shownextback %}
+                        nextButton: '.swiper-button-next',
+                        prevButton: '.swiper-button-prev',
+                        {% endif %}
+                        speed: {% if slide_settings.speed %} {{ slide_settings.speed }} {% else %} 300 {% endif %},
+                        slidesPerView: {{ slide_settings.items }},
+                        slidesPerColumn: {{ slide_settings.rows }},
+                        autoplay: {% if slide_settings.autoplay %} 3000 {% else %} false {% endif %},
+                        loop: false
+                    });
+                });
+            </script>
+        {% else %}
+            <div class="featured-categories-content">
+                {% for category in categories %}
+                    <div class="category-content">
+                        {% if use_second_img %}
+                            <img src="{{ category.secondary_image }}" alt="{{ category.name }}" />
+                        {% endif %}
+                        <h4 class="name"><a href="{{ category.href }}">{{ category.name }}</a></h4>
+                        {% if show_cate_des and category.description %}
+                            <p class="category-description">{{ category.description }}</p>
+                        {% endif %}
+                        {% if show_child %}
+                            {% if category.children %}
+                                {% set child_count = 0 %}
+                                <ul class="child-featured-categories">
+                                    {% for childcate in category.children %}
+                                        {% if child_count < child_number %}
+                                            <li><a href="{{ childcate.href }}">{{ childcate.name }}</a></li>
+                                        {% endif %}
+                                        {% set child_count = child_count + 1 %}
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+</div>

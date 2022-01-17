@@ -1,0 +1,288 @@
+{% if products %}
+	<div class="tool-bar">
+		<div class="row">
+			<div class="col-md-3 col-xs-6">
+				<div class="btn-group btn-group-sm">
+					{% if use_advance_view %}
+						<button type="button" onclick="category_view.changeView('grid', 1, 'btn-grid-1')" class="btn btn-default btn-custom-view btn-grid-1" data-toggle="tooltip" title="1">1</button>
+						<button type="button" onclick="category_view.changeView('grid', 2, 'btn-grid-2')" class="btn btn-default btn-custom-view btn-grid-2" data-toggle="tooltip" title="2">2</button>
+						<button type="button" onclick="category_view.changeView('grid', 3, 'btn-grid-3')" class="btn btn-default btn-custom-view btn-grid-3" data-toggle="tooltip" title="3">3</button>
+						<button type="button" onclick="category_view.changeView('grid', 4, 'btn-grid-4')" class="btn btn-default btn-custom-view btn-grid-4" data-toggle="tooltip" title="4">4</button>
+						<button type="button" onclick="category_view.changeView('grid', 5, 'btn-grid-5')" class="btn btn-default btn-custom-view btn-grid-5" data-toggle="tooltip" title="5">5</button>
+						<button type="button" onclick="category_view.changeView('list', 0, 'btn-list')" class="btn btn-default btn-custom-view btn-list" data-toggle="tooltip" title="{{ button_list }}"><i class="icon ion-android-menu"></i></button>
+						<input type="hidden" id="category-view-type" value="{{ advance_default_view }}" />
+						<input type="hidden" id="category-grid-cols" value="{{ product_p_row }}" />
+					{% else %}
+						<button type="button" id="grid-view" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="{{ button_grid }}"><i class="icon ion-grid"></i></button>
+						<button type="button" id="list-view" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="{{ button_list }}"><i class="icon ion-android-menu"></i></button>
+					{% endif %}
+				</div>
+			</div>
+			<div class="col-md-3 col-xs-6">
+				<div class="form-group"><a href="{{ compare }}" id="compare-total" class="btn btn-link">{{ text_compare }}</a></div>
+			</div>
+			<div class="col-md-3 col-xs-6">
+				<div class="form-group input-group input-group-sm">
+					{% if use_filter %}
+						<label class="input-group-addon" for="input-sort">{{ text_sort }}</label>
+						<select id="input-sort" class="form-control" onchange="ptfilter.filter(this.value);">
+							{% for sorts in pt_sorts %}
+								{% if sorts.value == '%s-%s'|format(sort, order) %}
+									<option value="{{ sorts.href }}" selected="selected">{{ sorts.text }}</option>
+								{% else %}
+									<option value="{{ sorts.href }}">{{ sorts.text }}</option>
+								{% endif %}
+							{% endfor %}
+						</select>
+					{% else %}
+						<label class="input-group-addon" for="input-sort">{{ text_sort }}</label>
+						<select id="input-sort" class="form-control" onchange="location = this.value;">
+							{% for sorts in sorts %}
+								{% if sorts.value == '%s-%s'|format(sort, order) %}
+									<option value="{{ sorts.href }}" selected="selected">{{ sorts.text }}</option>
+								{% else %}
+									<option value="{{ sorts.href }}">{{ sorts.text }}</option>
+								{% endif %}
+							{% endfor %}
+						</select>
+					{% endif %}
+				</div>
+			</div>
+			<div class="col-md-3 col-xs-6">
+				<div class="form-group input-group input-group-sm">
+					{% if use_filter %}
+						<label class="input-group-addon" for="input-limit">{{ text_limit }}</label>
+						<select id="input-limit" class="form-control" onchange="ptfilter.filter(this.value);">
+							{% for limits in pt_limits %}
+								{% if limits.value == limit %}
+									<option value="{{ limits.href }}" selected="selected">{{ limits.text }}</option>
+								{% else %}
+									<option value="{{ limits.href }}">{{ limits.text }}</option>
+								{% endif %}
+							{% endfor %}
+						</select>
+					{% else %}
+						<label class="input-group-addon" for="input-limit">{{ text_limit }}</label>
+						<select id="input-limit" class="form-control" onchange="location = this.value;">
+							{% for limits in limits %}
+								{% if limits.value == limit %}
+									<option value="{{ limits.href }}" selected="selected">{{ limits.text }}</option>
+								{% else %}
+									<option value="{{ limits.href }}">{{ limits.text }}</option>
+								{% endif %}
+							{% endfor %}
+						</select>
+					{% endif %}
+				</div>
+			</div>
+		</div>
+	</div>
+    <div class="row">
+		{% for product in products %}
+			<div class="product-layout product-list col-xs-12 product-items">
+				<div class="product-thumb">
+					<div class="product-item">	
+						
+						{% if image_effect == 'swatches' %}
+							<div class="image swatches-image-container">
+								<div class="inner">
+									{% if show_cate_label %}
+											<div class="box-label">
+												{% if product.special %}
+													<div><span class="pro-label sale">{{ '-' ~ product.rate_special ~ '%' }}</span></div>
+												{% endif %}
+												{% if product.is_new %}
+													<div><span class="pro-label new">{{ text_new }}</span></div>
+												{% endif %}
+											</div>
+									{% endif %}
+									<a href="{{ product.href }}">
+										<img src="{{ product.thumb }}"  alt="{{ product.name }}" title="{{ product.name }}"
+											 class="img-responsive img-cate-{{ product.product_id }}" />
+										<input type="hidden" value="{{ product.thumb }}" class="img-default-{{ product.product_id }}" />
+										{% if product.swatches_images %}
+											{% for s_image in product.swatches_images %}
+												<input type="hidden" value="{{ s_image.image }}" class="img-swatch-{{ product.product_id }}-{{ s_image.product_option_value_id }}" />
+											{% endfor %}
+										{% endif %}
+									</a>
+									
+									{% if  show_cate_wishlist or show_cate_compare or show_cate_cart or use_quick_view  %}
+										<div class="button-group">
+											<div class="inner">
+												
+												{% if show_cate_wishlist %}
+													<button type="button" class="button-wishlist"  title="{{ button_wishlist }}" onclick="wishlist.add('{{ product.product_id }}');"><span>{{ button_wishlist }}</span></button>
+												{% endif %}
+												{% if show_cate_compare %}
+													<button type="button" class="button-compare"  title="{{ button_compare }}" onclick="compare.add('{{ product.product_id }}');"><span>{{ button_compare }}</span></button>
+												{% endif %}
+												
+												{% if use_quick_view %}
+													<button class="button-quickview" type="button"  title="{{ button_quickview }}" onclick="ptquickview.ajaxView('{{ product.href }}')"><span>{{ button_quickview }}</span></button>
+												{% endif %}
+											</div>
+										</div>
+									{% endif %}
+									
+									
+								</div>
+							</div>
+							
+						{% else %}
+							<div class="image rotate-image-container">
+								<div class="inner">
+									{% if show_cate_label %}
+											<div class="box-label">
+												{% if product.special %}
+													<div><span class="pro-label sale">{{ '-' ~ product.rate_special ~ '%' }}</span></div>
+												{% endif %}
+												{% if product.is_new %}
+													<div><span class="pro-label new">{{ text_new }}</span></div>
+												{% endif %}
+											</div>
+									{% endif %}
+									<a href="{{ product.href }}">
+										<img src="{{ product.thumb }}" alt="{{ product.name }}" title="{{ product.name }}" class="img-responsive img-default-image" />
+										{% if product.rotate_image %}
+											<img src="{{ product.rotate_image }}" alt="{{ product.name }}" title="{{ product.name }}" class="img-responsive img-rotate-image" />
+										{% endif %}
+									</a>
+									
+									{% if  show_cate_wishlist or show_cate_compare or show_cate_cart or use_quick_view  %}
+										<div class="button-group">
+											<div class="inner">
+												
+												{% if show_cate_wishlist %}
+													<button type="button" class="button-wishlist"  title="{{ button_wishlist }}" onclick="wishlist.add('{{ product.product_id }}');"><span>{{ button_wishlist }}</span></button>
+												{% endif %}
+												{% if show_cate_compare %}
+													<button type="button" class="button-compare"  title="{{ button_compare }}" onclick="compare.add('{{ product.product_id }}');"><span>{{ button_compare }}</span></button>
+												{% endif %}
+												
+												{% if use_quick_view %}
+													<button class="button-quickview" type="button"  title="{{ button_quickview }}" onclick="ptquickview.ajaxView('{{ product.href }}')"><span>{{ button_quickview }}</span></button>
+												{% endif %}
+											</div>
+										</div>
+									{% endif %}
+									
+								</div>
+							</div>
+						{% endif %}
+						
+						<div class="caption">
+							<div class="inner">
+								{% if image_effect == 'swatches' %}
+									{% if product.options %}
+										<div class="category-options">
+											{% for option in product.options %}
+												<ul class="ul-swatches-colors">
+													{% for option_value in option.product_option_value %}
+														<li class="swatches-options">
+															<a href="javascript:void(0);" onclick="swatches.changeSwatchInCategory($(this));" title="{{ option_value.name }}"
+															   style="{% if option_value.image %} width: {{ icon_swatches_width }}px; height: {{ icon_swatches_height }}px;
+														background-image: url('{{ option_value.image }}') {% endif %}"
+															   data-product-id="{{ product.product_id }}"
+															   data-product-option-value-id="{{ option_value.product_option_value_id }}">{% if not option_value.image %} {{ option_value.name }} {% endif %}</a>
+														</li>
+													{% endfor %}
+												</ul>
+											{% endfor %}
+										</div>
+									{% endif %}
+								{% endif %}
+								{% if product.manufacturer %}
+									<p class="manufacture-product">
+										<a href="{{ product.manufacturer_href }}">{{ product.manufacturer }}</a>
+									</p>
+								{% endif %}
+								
+								<h4><a href="{{ product.href }}">{{ product.name }}</a></h4>
+								{% if product.rating %}
+									<div class="ratings">
+										<div class="rating">
+											{% for i in 1..5 %}
+												{% if product.rating < i %}
+													<span class="icon-ratings"><i class="icon-rating icon-rating-o"></i></span>
+												{% else %}
+													<span class="icon-ratings"><i class="icon-rating icon-rating-x"></i></span>
+												{% endif %}
+											{% endfor %}
+										</div>
+									</div>
+								{% endif %}
+							
+								{% if show_cate_price and product.price %}
+									<p class="price"> {% if not product.special %}
+											{{ product.price }}
+										{% else %} <span class="price-new">{{ product.special }}</span> <span class="price-old">{{ product.price }}</span> {% endif %}
+										{% if product.tax %} <span class="price-tax">{{ text_tax }} {{ product.tax }}</span> {% endif %} </p>
+								{% endif %}
+								
+								
+								
+								{% if show_cate_prodes %}
+									<p class="product-description">{{ product.description }}</p>
+								{% endif %}	
+								
+								{% if show_cate_cart %}
+									<button type="button" class="button-cart"  title="{{ button_cart }}" onclick="cart.add('{{ product.product_id }}', '{{ product.minimum }}');"><span>{{ button_cart }}</span></button>
+								{% endif %}
+							</div>
+							
+						</div>
+						
+					</div>
+				</div>
+			</div>
+		{% endfor %}
+	</div>
+	<div class="tool-bar-bottom">
+		<div class="row ">
+			{% if use_filter %}
+				<div class="col-sm-6 text-left ajax_pagination">{{ pt_pagination }}</div>
+			{% else %}
+				<div class="col-sm-6 text-left">{{ pagination }}</div>
+			{% endif %}
+			<div class="col-sm-6 text-right">{{ results }}</div>
+		</div>
+	</div>
+{% endif %}
+{% if not categories and not products %}
+    <p>{{ text_empty }}</p>
+    <div class="buttons">
+        <div class="pull-right"><a href="{{ continue }}" class="btn btn-primary">{{ button_continue }}</a></div>
+    </div>
+{% endif %}
+
+<script type="text/javascript">
+    // Product List
+    $('#list-view').click(function() {
+        $('#content .product-grid > .clearfix').remove();
+
+        $('#content .row > .product-grid').attr('class', 'product-layout product-list col-xs-12');
+        $('#grid-view').removeClass('active');
+        $('#list-view').addClass('active');
+
+        localStorage.setItem('display', 'list');
+    });
+
+    // Product Grid
+    $('#grid-view').click(function() {
+        var cols = $('#column-right, #column-left').length;
+
+        if (cols == 2) {
+            $('#content .product-list').attr('class', 'product-layout product-grid col-lg-6 col-md-6 col-sm-12 col-xs-12');
+        } else if (cols == 1) {
+            $('#content .product-list').attr('class', 'product-layout product-grid col-lg-4 col-md-4 col-sm-6 col-xs-12');
+        } else {
+            $('#content .product-list').attr('class', 'product-layout product-grid col-lg-3 col-md-3 col-sm-6 col-xs-12');
+        }
+
+        $('#list-view').removeClass('active');
+        $('#grid-view').addClass('active');
+
+        localStorage.setItem('display', 'grid');
+    });
+</script>

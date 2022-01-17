@@ -1,0 +1,55 @@
+<div class="slider-container">
+    <div class="slide-loading"></div>
+    <div id="plaza-slider" class="plaza-slider">
+        {% set config = slider[0] %}
+        {% set i = 1 %}
+        {% for slider in ptsliders %}
+            {% set i = i + 1 %}
+            <img style="display: none;" src="{{ slider['image'] }}" alt="" title="#slide-caption{{ i }}"  />
+        {% endfor %}
+    </div>
+    {% set i = 1 %}
+    {% for slider in ptsliders %}
+        {% set i = i + 1 %}
+        <div id="slide-caption{{ i }}" class="slide-caption nivo-html-caption nivo-caption">
+            <div class="slide-title">
+                {% if slider.title %}
+                    <h3>{{ slider.title }}</h3>
+                {% endif %}
+            </div>
+            <div class="sub-title">
+                {% if slider.sub_title %}
+                    <h3>{{ slider.sub_title }}</h3>
+                {% endif %}
+            </div>
+            <div class="slide-description">
+                {{ slider.description }}
+            </div>
+            {% if slider.link %}
+                <div class="slide-readmore">
+                    <a href="{{ slider.link }}" title="{{ text_link_button }}">{{ text_link_button }}</a>
+                </div>
+            {% endif %}
+        </div>
+    {% endfor %}
+</div>
+<script type="text/javascript">
+    $(window).load(function() {
+        $('#plaza-slider').nivoSlider({
+            slices: 15,
+            boxCols: 8,
+            boxRows: 4,
+            animSpeed: 500,
+            manualAdvance: {% if config.auto and config.auto == '1' %} false {% else %} true {% endif %} ,
+            pauseTime: {% if config.delay %} {{ config.delay }} {% else %} 3000 {% endif %} ,
+            controlNav: {% if config.contrl and config.contrl == '1' %} true {% else %} false {% endif %} ,
+            directionNav: {% if config.nextback and config.nextback == '1' %} true {% else %} false {% endif %} ,
+            pauseOnHover: {% if config.hover and config.hover == '1' %} true {% else %} false {% endif %} ,
+            controlNavThumbs: false,
+            effect: 'random',
+            startSlide: 0,
+            prevText: 'Prev',
+            nextText: 'Next'
+        });
+    });
+</script>

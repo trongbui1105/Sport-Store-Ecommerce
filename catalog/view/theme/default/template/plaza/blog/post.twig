@@ -1,0 +1,108 @@
+{{ header }}
+<div class="container">
+    <ul class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+            <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+        <li>{{ heading_title }}</li>
+    </ul>
+</div>
+<div class="container">
+    <div class="main">
+        <div class="row">
+            {% if layout == "left" %}
+                <div class="col-sm-3">
+                    {% if related_posts %}
+                        <div class="blog-widget-section blog-widget">
+                            <div class="title">
+                                <h4>{{ text_related_post }}</h4>
+                            </div>
+                            {% for post in related_posts %}
+                                <div class="widget-content">
+                                    <img src="{{ post.image }}" alt="{{ post.name }}" />
+                                    <a href="{{ post.href }}"><span class="name">{{ post.name }}</span></a>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            {% endif %}
+            {% if layout == "left" or layout == "right" %}
+                {% set class = 'col-sm-9' %}
+            {% else %}
+                {% set class = 'col-sm-12' %}
+            {% endif %}
+            <div id="content" class="{{ class }}">{{ content_top }}
+                <div class="post-container">
+                    <div class="post-title">
+                        <h3>{{ heading_title }}</h3>
+                    </div>
+                    <span class="post-date">{{ date }}{% if author %}{{ ' | ' ~ author }}{% endif %}</span>
+                    <div class="post-description">
+                        <img src="{{ image }}" alt="heading_title" />
+                        <p>{{ description }}</p>
+                    </div>
+                </div>
+                {% if related_posts %}
+                    <div class="swiper-viewport">
+                        <div class="swiper-container posts-container">
+                            <div class="swiper-wrapper">
+                                {% for post in related_posts %}
+                                    <div class="post-content swiper-slide">
+                                        <div class="post-image"><img src="{{ post.image }}" /></div>
+                                        <div class="post-date">
+                                            {{ post.date_added }}{% if post.author %}{{ " | " ~ post.author }}{% endif %}
+                                        </div>
+                                        <a class="post-name" href="{{ post.href }}">{{ post.name }}</a>
+                                        <div class="post-intro">{{ post.intro_text }}</div>
+                                        <div class="btn-more"><a href="{{ post.href }}">{{ button_show }}</a></div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% if slide.pagination %}
+                            <div class="swiper-pagination post-pagination"></div>
+                        {% endif %}
+
+                        {% if slide.navigation %}
+                            <div class="swiper-pager">
+                                <div class="swiper-button-next"></div>
+                                <div class="swiper-button-prev"></div>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <script type="text/javascript">
+                        $(".posts-container").swiper({
+                            spaceBetween: 20,
+                            nextButton: '.swiper-button-next',
+                            prevButton: '.swiper-button-prev',
+                            speed: 600,
+                            slidesPerView: 3,
+                            slidesPerColumn: 1,
+                            autoplay: false,
+                            loop: false
+                        });
+                    </script>
+                {% endif %}
+            </div>
+            {% if layout == "right" %}
+                <div class="col-sm-3">
+                    {% if related_posts %}
+                        <div class="blog-widget-section blog-widget">
+                            <div class="title">
+                                <h4>{{ text_related_post }}</h4>
+                            </div>
+                            {% for post in related_posts %}
+                                <div class="widget-content">
+                                    <img src="{{ post.image }}" alt="{{ post.name }}" />
+                                    <a href="{{ post.href }}"><span class="name">{{ post.name }}</span></a>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{{ footer }}

@@ -1,0 +1,18 @@
+/* Label */
+.pro-label {
+    position: absolute;
+    right: 15px;
+    top: 10px;
+    min-width: 50px;
+}
+.pro-label.sale {
+    background-color: #fe0000;
+    color: #fedcba;
+}
+.pro-label.new {
+    background-color: #00d95a;
+    color: #1b431b;
+}
+/* Rotate Image */
+.rotate-image-container .img-rotate-image { position:absolute;top:0;left:0;bottom:0;right:0;visibility:hidden;opacity: 0;z-index: 1;}
+.rotate-image-container:hover .img-rotate-image {opacity: 1;visibility: visible}

@@ -1,0 +1,13 @@
+{% if latest_blog %}
+    <div class="blog-widget-section blog-widget">
+        <div class="title">
+            <h4>{{ text_latest_post }}</h4>
+        </div>
+        {% for post in latest_blog %}
+        <div class="widget-content">
+            <img src="{{ post.image }}" alt="{{ post.name }}" />
+            <a href="{{ post.href }}"><span class="name">{{ post.name }}</span></a>
+        </div>
+        {% endfor %}
+    </div>
+{% endif %}

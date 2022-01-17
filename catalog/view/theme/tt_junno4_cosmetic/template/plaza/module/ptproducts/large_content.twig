@@ -1,0 +1,200 @@
+
+    {# Grid content #}
+    <div class="grid-style">
+        <div class="product-item first-product">
+            <div class="image {% if rotate_image %}rotate-image-container{% endif %}">
+                <a href="{{ href }}">
+                    {% if rotate_image %}
+                        <img  src="{{ rotate_image }}"   alt="{{ name[:20] ~ '...' }}" title="{{ name }}" class="img-responsive img-rotate-image " />
+                    {% endif %}
+                    <img src="{{ thumb }}"  alt="{{ name[:20] ~ '...' }}" title="{{ name }}" class="img-responsive img-mod-{{ section_id }}-{{ product_id }}" />
+                    {% if swatches_images %}
+                        <input type="hidden" value="{{ thumb }}" class="img-default-{{ section_id }}-{{ product_id }}" />
+                        {% for s_image in swatches_images %}
+                            <input type="hidden" value="{{ s_image.image }}" class="img-swatch-{{ section_id }}-{{ product_id }}-{{ s_image.product_option_value_id }}" />
+                        {% endfor %}
+                    {% endif %}
+                </a>
+				{% if show_quickview %}
+					<div class="quickview">
+						<button type="button" title="{{ button_quickview }}" class="button-quickview" onclick="ptquickview.ajaxView('{{ href }}')"><span>{{ button_quickview }}</span></button>
+					</div>
+				{% endif %}
+                
+            </div>
+            <div class="caption">
+                {% if gallery_images %}
+                    <div class="gallery-thumbs">
+                        <div class="swiper-viewport">
+                            <div class="swiper-container gallery-images-{{ section_id }}-{{ product_id }}">
+                                <div class="swiper-wrapper">
+                                    {% for img in gallery_images %}
+                                        <div class="swiper-slide">
+                                            <a href="javascript:changeImg('{{ section_id }}', '{{ product_id }}', '{{ img.popup }}');" class="child-thumb" data-img="{{ img.popup }}">
+                                                <img src="{{ img.thumb }}" alt="{{ name[:20] ~ '...' }}"/>
+                                            </a>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="swiper-pager">
+                                <div class="swiper-button-next swiper-button-next-{{ section_id }}-{{ product_id }}"></div>
+                                <div class="swiper-button-prev swiper-button-prev-{{ section_id }}-{{ product_id }}"></div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+				{% if options %}
+                    <div class="category-options product-options">
+                        {% for option in options %}
+                            <ul class="ul-swatches-colors">
+                                {% for option_value in option.product_option_value %}
+                                    <li class="swatches-options">
+                                        <a href="javascript:void(0);" onclick="swatches.changeModuleSwatches($(this));" title="{{ option_value.name }}"
+                                           style="{% if option_value.image %} width: 15px; height: 15px;
+																			background-image: url('{{ option_value.image }}') {% endif %}"
+                                           data-module-id="{{ section_id }}"
+                                           data-product-id="{{ product_id }}"
+                                           data-product-option-value-id="{{ option_value.product_option_value_id }}">{% if not option_value.image %} {{ option_value.name }} {% endif %}</a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+				{% if manufacturer %}
+                    <p class="manufacture-product">
+                        <a href="{{ manufacturer_href }}">{{ manufacturer }}</a>
+                    </p>
+                {% endif %}
+
+                {% if show_label and (special or is_new) %}
+                    <div class="box-label">
+                        {% if special %}
+                            <div><span class="pro-label sale">{{ '-' ~ rate_special ~ '%' }}</span></div>
+                        {% endif %}
+                        {% if is_new %}
+                            <div><span class="pro-label new">{{ text_new }}</span></div>
+                        {% endif %}
+                    </div>
+                {% endif %}
+
+                
+
+                
+
+                <h4><a href="{{ href }}">{{ name }}</a></h4>
+                {% if rating %}
+                    <div class="rating">
+                        {% for i in 1..5 %}
+                            {% if rating < i %}
+                                <span class="icon-ratings"><i class="icon-rating icon-rating-o"></i></span>
+                            {% else %}
+                                <span class="icon-ratings"><i class="icon-rating icon-rating-x"></i></span>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                {% if show_price and price %}
+                    <p class="price">
+                        {% if not special %}
+                            {{ price }}
+                        {% else %}
+                            <span class="price-new">{{ special }}</span> <span class="price-old">{{ price }}</span>
+                        {% endif %}
+                        {% if tax %}
+                            <span class="price-tax">{{ text_tax }} {{ tax }}</span>
+                        {% endif %}
+                    </p>
+                {% endif %}
+
+                {% if show_description and description %}
+                    <p class="product-description">{{ description }}</p>
+                {% endif %}
+
+                {% if show_countdown and date_end %}
+                    <p class="text-countdown">{{ text_countdown }}</p>
+                    <div class="countdown-box countdown-product-{{ product_id }}" data-id="{{ product_id }}" data-date="{{ date_end }}">
+                        <div class="inner">
+                            <div class="box">
+                                <b class="day"></b><span>{{ text_days }}</span>
+                            </div>
+                            <div class="box">
+                                <b class="hour"></b><span>{{ text_hours }}</span>
+                            </div>
+                            <div class="box">
+                                <b class="min"></b><span>{{ text_mins }}</span>
+                            </div>
+                            <div class="box">
+                                <b class="sec"></b><span>{{ text_secs }}</span>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+                
+				{% if show_cart or show_wishlist or show_compare %}
+                    <div class="button-group">
+                        <div class="inner">
+                            {% if show_cart %}
+								<button type="button" class="button-cart" onclick="cart.add('{{ product_id }}');" title="{{ button_cart }}"><span>{{ button_cart }}</span></button>	
+							{% endif %}
+                            {% if show_wishlist %}
+                                <button type="button"  title="{{ button_wishlist }}" class="button-wishlist" onclick="wishlist.add('{{ product_id }}');"><span>{{ button_wishlist }}</span></button>
+                            {% endif %}
+                            {% if show_compare %}
+                                <button type="button"  title="{{ button_compare }}" class="button-compare" onclick="compare.add('{{ product_id }}');"><span>{{ button_compare }}</span></button>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var gallery_images = $(".gallery-images-{{ section_id }}-{{ product_id }}");
+		
+		$('.child-thumb').click(function(){
+			$('.child-thumb').removeClass('active');
+			$(this).addClass('active');
+		});
+        gallery_images.swiper({
+            spaceBetween: 0,
+            // nextButton: '.swiper-button-next-{{ section_id }}-{{ product_id }}',
+            // prevButton: '.swiper-button-prev-{{ section_id }}-{{ product_id }}',
+            speed: 500,
+            preloadImages: false,
+            watchSlidesVisibility: true,
+            slidesPerView: 4,
+            slidesPerColumn: 1,
+            breakpoints: {
+                1499: {
+                    slidesPerView: 4,
+                    slidesPerColumn: 1
+                },
+                1199: {
+                    slidesPerView: 4,
+                    slidesPerColumn: 1
+                },
+                991: {
+                    slidesPerView: 4,
+                    slidesPerColumn: 1
+                },
+                767: {
+                    slidesPerView: 4,
+                    slidesPerColumn: 1
+                },
+                479: {
+                    slidesPerView: 4,
+                    slidesPerColumn: 1
+                }
+            },
+            autoplay: false,
+            loop: false
+        });
+
+        function changeImg(section_id, product_id, popup) {
+            $('.first-product .img-mod-' + section_id + '-' + product_id).attr('src', popup);
+        }
+    </script>
+

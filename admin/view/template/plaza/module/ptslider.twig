@@ -1,0 +1,102 @@
+{{ header }}{{ column_left }}
+<div id="content">
+    <div class="page-header">
+        <div class="container-fluid">
+            <div class="pull-right">
+                <a href="{{ slider_link }}" data-toggle="tooltip" title="{{ text_banner_slider }}" class="btn btn-theme-option btn-primary"><i class="fa fa-film" aria-hidden="true"></i></a>
+                <button type="submit" form="form-module" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
+                <a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a></div>
+            <h1>{{ heading_title }}</h1>
+            <ul class="breadcrumb">
+                {% for breadcrumb in breadcrumbs %}
+                    <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <div class="container-fluid">
+        {% if error_warning %}
+            <div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+            </div>
+        {% endif %}
+        <div class="theme-option-container">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><i class="fa fa-pencil"></i> {{ text_edit }}</h3>
+                </div>
+                <div class="panel-body">
+                    <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-module" class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label" for="input-name">{{ entry_name }}</label>
+                            <div class="col-sm-6">
+                                <input type="text" name="name" value="{{ name }}" placeholder="{{ entry_name }}" id="input-name" class="form-control" />
+                                {% if error_name %}
+                                    <div class="text-danger">{{ error_name }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label" for="input-status">{{ entry_status }}</label>
+                            <div class="col-sm-6">
+                                <input type="hidden" name="status" value="0" />
+                                <input type="checkbox" class="ckb-switch" name="status" id="input-status"
+                                       data-toggle="toggle" data-on="{{ text_enabled }}" data-off="{{ text_disabled }}" data-width="100" data-height="36"
+                                        {% if status %} value="1" checked {% else %} value="0" {% endif %}>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label" for="input-slider">{{ entry_slider }}</label>
+                            <div class="col-sm-6">
+                                <select id="input-slider" name="slider" class="form-control">
+                                    {% for ptslider in ptsliders %}
+                                        {% if slider == ptslider['ptslider_id'] %}
+                                            <option selected="selected" value="{{ ptslider['ptslider_id'] }}" >
+                                                {{ ptslider['name'] }}
+                                            </option>
+                                        {% else %}
+                                            <option value="{{ ptslider['ptslider_id'] }}" >
+                                                {{ ptslider['name'] }}
+                                            </option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group required">
+                            <label class="col-sm-3 control-label" for="input-width">{{ entry_width  }}</label>
+                            <div class="col-sm-3">
+                                <input type="text" name="width" value="{{ width  }}" placeholder="{{ entry_width  }}" id="input-width" class="form-control" />
+                                {% if error_width %}
+                                    <div class="text-danger">{{ error_width  }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="form-group required">
+                            <label class="col-sm-3 control-label" for="input-height">{{ entry_height  }}</label>
+                            <div class="col-sm-3">
+                                <input type="text" name="height" value="{{ height  }}" placeholder="{{ entry_height  }}" id="input-height" class="form-control" />
+                                {% if error_height %}
+                                    <div class="text-danger">{{ error_height  }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function() {
+        $('.toggle.btn').on('click', function () {
+            var ckb_status = parseInt($(this).find('.ckb-switch').val());
+            if(ckb_status == 1) {
+                $(this).find('.ckb-switch').val('0');
+            } else {
+                $(this).find('.ckb-switch').val('1');
+            }
+        });
+    })
+</script>
+{{ footer }}

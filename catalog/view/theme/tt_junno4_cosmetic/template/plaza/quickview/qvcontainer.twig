@@ -1,0 +1,27 @@
+{% if use_quick_view %}
+<div id="quickview-content">
+    <!-- Load product content -->
+</div>
+
+<div id="quickview-bg-block">
+    <!-- Background -->
+</div>
+
+<div class="quickview-load-img">
+    <img src="{{ loader_img }}" alt="" />
+</div>
+
+<div class="lightbox-container lbo-quickview"></div>
+
+<input type="hidden" id="qv-text-close" value="{{ text_close }}" />
+
+<script type="text/javascript">
+    $('#quickview-bg-block').click(function () {
+        ptquickview.closeQVFrame();
+    })
+
+    if($('#product-product').length) {
+        $('.lightbox-container.lbo-quickview').remove();
+    }
+</script>
+{% endif %}

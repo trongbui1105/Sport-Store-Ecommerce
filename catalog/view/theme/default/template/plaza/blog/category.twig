@@ -1,0 +1,112 @@
+{{ header }}
+<div class="container">
+    <ul class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+            <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+        <li>{{ category_title }}</li>
+    </ul>
+</div>
+<div class="container">
+    <div class="main">
+        <div class="page-title post-titles"><h3>{{ category_title }}</h3></div>
+        <div class="row">
+            {% if layout == "left" %}
+                <div class="col-sm-3">
+                    {{ latest_blog_widget }}
+                </div>
+            {% endif %}
+            {% if layout == "left" or layout == "right" %}
+                {% set class = 'col-sm-9' %}
+            {% else %}
+                {% set class = 'col-sm-12' %}
+            {% endif %}
+            <div id="content" class="{{ class }}">
+                <div class="row">
+                    <div class="col-md-6 col-sm-6 hidden-xs">
+                        <div class="btn-group btn-group-sm">
+                            <button type="button" onclick="location='{{ list_content_link }}'" class="btn btn-default {% if post_content == "list" %}active{% endif %}" data-toggle="tooltip" title="{{ button_list }}"><i class="fa fa-th-list"></i></button>
+                            <button type="button" onclick="location='{{ grid_content_link }}'" class="btn btn-default {% if post_content == "grid" %}active{% endif %}" data-toggle="tooltip" title="{{ button_grid }}"><i class="fa fa-th"></i></button>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-4 hidden-xs"></div>
+                    <div class="col-md-2 col-sm-2 col-xs-12">
+                        <div class="form-group input-group input-group-sm">
+                            <label class="input-group-addon" for="input-limit">{{ text_limit }}</label>
+                            <select id="input-limit" class="form-control" onchange="location = this.value;">
+                                {% for limits in limits %}
+                                    {% if limits.value == limit %}
+                                        <option value="{{ limits.href }}" selected="selected">{{ limits.text }}</option>
+                                    {% else %}
+                                        <option value="{{ limits.href }}">{{ limits.text }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                {% if posts %}
+                    <div class="post-page">
+                        {% set i = 0 %}
+                        {% if post_content == "grid" %}
+                            <div class="row">
+                                {% for post in posts %}
+                                    {% set i = i + 1 %}
+                                    <div class="post-layout col-md-4 col-sm-6">
+                                        <div class="post-item {{ (i % 2 == 0) ? 'even' : 'odd' }}">
+                                            <div class="post-item-inner">
+                                                <div class="post-intro">
+                                                    <img src="{{ post.image }}" alt="{{ post.name }}" />
+                                                    <div class="post-name"><h3><a href="{{ post.href }}">{{ post.name }}</a></h3></div>
+                                                    <p class="post-date">{{ post.date_added }}{% if post.author %}{{ " | " ~ post.author }}{% endif %}</p>
+                                                    <div class="intro-content">{{ post.intro_text }}</div>
+                                                </div>
+                                                <a class="a-show-more" href="{{ post.href }}">{{ button_show }}</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+
+                        {% if post_content == "list" %}
+                            {% for post in posts %}
+                                {% set i = i + 1 %}
+                                <div class="post-layout post-list">
+                                    <div class="post-item {{ (i % 2 == 0) ? 'even' : 'odd' }}">
+                                        <div class="post-item-inner">
+                                            <div class="post-intro row">
+                                                <div class="col-sm-4">
+                                                    <img src="{{ post.image }}" alt="{{ post.name }}" />
+                                                </div>
+                                                <div class="col-sm-8">
+                                                    <div class="post-name"><h3><a href="{{ post.href }}">{{ post.name }}</a></h3></div>
+                                                    <p class="post-date">{{ post.date_added }}{% if post.author %}{{ " | " ~ post.author }}{% endif %}</p>
+                                                    <div class="intro-content">{{ post.intro_text }}</div>
+                                                    <a class="a-show-more" href="{{ post.href }}">{{ button_show }}</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6 show-page text-left">{{ pagination }}</div>
+                        <div class="col-sm-6 text-right">{{ results }}</div>
+                    </div>
+                {% else %}
+                    <p>{{ text_post_empty }}</p>
+                {% endif %}
+            </div>
+            {% if layout == "right" %}
+                <div class="col-sm-3">
+                    {{ latest_blog_widget }}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{{ footer }}

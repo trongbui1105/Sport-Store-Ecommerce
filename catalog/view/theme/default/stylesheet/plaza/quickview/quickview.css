@@ -1,0 +1,26 @@
+#quickview-bg-block {  display: none; background-color : rgba(0,0,0,0.35); top: 0; left: 0; right: 0; bottom: 0;  margin: auto; position: fixed; z-index: 100;  }
+
+.quickview-load-img {  display: none; position: fixed; top: 50%; left: 0; right: 0; bottom: 0; text-align: center; z-index: 105; margin: auto;}
+
+.a-qv-close {
+    position: absolute;
+    z-index: 200;
+    top: 15px;
+    right: 15px;
+    font-size:  14px;
+    color: red;
+}
+.qv-button-container { position: relative }
+#quickview-content {
+    position: fixed;
+    background-color: #FFFFFF;
+    border: solid 2px #000000;
+    display: none;
+    padding: 20px;
+    z-index: 205;
+    width: 92%;
+    height: 86%;
+    top: 7%;
+    left: 4%;
+    overflow: auto !important;
+}

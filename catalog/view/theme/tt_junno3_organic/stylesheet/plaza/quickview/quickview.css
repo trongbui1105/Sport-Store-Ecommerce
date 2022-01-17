@@ -1,0 +1,64 @@
+.quickview-container {
+    padding: 0 1.5rem;
+    position: fixed;
+    background-color: transparent;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1040;
+    display: none;
+    text-align: center;
+    overflow-y: auto;
+}
+.quickview-container:before {
+    content: '';
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+}
+#quickview-bg-block {position: fixed;background-color: rgba(0,0,0,0.7);top: 0;bottom: 0;left: 0;right: 0;}
+
+.quickview-load-img {  display: none; position: fixed; top: 50%; left: 0; right: 0; bottom: 0; text-align: center; z-index: 105; margin: auto;}
+
+.a-qv-close {
+    position: absolute;
+    z-index: 8;
+    font-size: 0;
+    width: 4rem;
+    height: 4rem;
+    line-height: 4rem;
+    top: 0;
+    right: 0;
+    text-align: center;
+}
+.a-qv-close:before {
+    content:"\f2d7";
+    font-family: "Ionicons";
+    font-size: 2.8rem;
+}
+.qv-button-container { position: relative }
+#quickview-content {
+    background-color: #FFFFFF;
+    visibility: hidden;
+    border: 0;
+    display: inline-block;
+    vertical-align: middle;
+    padding: 0;
+    z-index: 205;
+    margin: 2.5rem auto;
+    max-width: 92rem;
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    padding: 1.5rem;
+    padding-right: 0;
+}
+#quickview-content .product-details {
+}
+.quickview-container .mousetrap,.quickview-container .lightbox-container {
+    display: none !Important;
+}
+.quickview-container .product-zoom-image {
+    pointer-events: none;
+}

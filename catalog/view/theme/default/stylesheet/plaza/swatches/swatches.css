@@ -1,0 +1,6 @@
+.ul-swatches-colors { list-style: none; text-align: left; overflow: hidden; padding: 0; }
+.ul-swatches-colors li { float: left; border: 1px solid #fff; display: inline-block; position: relative; margin-right: 5px; padding: 2px; }
+.ul-swatches-colors .swatches-options:hover { border: 1px solid #E88888; }
+.ul-swatches-colors .swatches-options.checked { border: 1px solid #ff0000; }
+.ul-swatches-colors .swatches-options a { float: left; display: inline-block; }
+.option-swatches { display: none; }

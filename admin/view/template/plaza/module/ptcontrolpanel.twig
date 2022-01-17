@@ -1,0 +1,869 @@
+{{ header }}{{ column_left }}
+<div id="content">
+    <div class="page-header">
+        <div class="container-fluid">
+            <div class="pull-right">
+                <button type="submit" form="form-ptcontrolpanel" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
+                <a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a></div>
+            <h1>{{ heading_title }}</h1>
+            <ul class="breadcrumb theme-option-breadcrumb">
+                {% for breadcrumb in breadcrumbs %}
+                    <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <div class="container-fluid">
+        {% if error_warning %}
+            <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+            </div>
+        {% endif %}
+        {% if error_load_file %}
+            <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error_load_file }}
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+            </div>
+        {% endif %}
+        {% if success %}
+            <div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> {{ success }}
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+            </div>
+        {% endif %}
+        <div class="row">
+            <div class="col-md-3 col-sm-12">
+                <div class="theme-option-container">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">{{ text_dashboard_menu }}</h3>
+                        </div>
+                        <ul class="nav nav-tabs menu-sections pt-dashboard-menu">
+                            {% set i = 0 %}
+                            {% for menu in plaza_menus %}
+                                {% if menu.child %}
+                                    <li {% if menu.active %} class="active" {% endif %}>
+                                        <a href="#ptcollapse_{{ i }}" data-toggle="collapse" class="parent {% if not menu.active %} collapsed {% endif %}">{{ menu.title }}</a>
+                                        <ul id="ptcollapse_{{ i }}" class="collapse {% if menu.active %} in {% endif %}">
+                                            {% for item in menu.child %}
+                                                <li {% if item.active %} class="active" {% endif %}><a href="{{ item.url }}">{{ item.title }}</a></li>
+                                            {% endfor %}
+                                        </ul>
+                                    </li>
+                                {% else %}
+                                    <li {% if menu.active %} class="active" {% endif %}><a href="{{ menu.url }}">{{ menu.title }}</a></li>
+                                {% endif %}
+                                {% set i = i + 1 %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-9 col-sm-12">
+                <div class="theme-option-container">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title"><i class="fa fa-magic"></i> {{ text_edit }}</h3>
+                            <div class="panel-select">
+                                <select id="input-store" class="form-control">
+                                    {% for store in stores %}
+                                        <option value="{{ store.store_id }}" {% if(store.store_id == 0) %}selected="selected"{% endif %}>{{ store.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3 col-left">
+                                <ul class="nav nav-tabs menu-sections">
+                                    <li class="active"><a href="#tab-general" data-toggle="tab"><i class="fa fa-tachometer" aria-hidden="true"></i>{{ tab_general }}</a></li>
+                                    <li><a href="#tab-font" data-toggle="tab"><i class="fa fa-font" aria-hidden="true"></i>{{ tab_font }}</a></li>
+                                    <li><a href="#tab-catalog" data-toggle="tab"><i class="fa fa-shopping-bag" aria-hidden="true"></i>{{ tab_catalog }}</a></li>
+                                    <li><a href="#tab-product" data-toggle="tab"><i class="fa fa-cube" aria-hidden="true"></i>{{ tab_product }}</a></li>
+                                    <li><a href="#tab-category" data-toggle="tab"><i class="fa fa-tags" aria-hidden="true"></i>{{ tab_category }}</a></li>
+                                    <li><a href="#tab-advance" data-toggle="tab"><i class="fa fa-fire" aria-hidden="true"></i>{{ tab_advance }}</a></li>
+                                </ul>
+                            </div>
+                            <div class="col-md-9 col-right">
+                                <div class="panel-body">
+                                    <form action="{{ action_import }}" method="post" enctype="multipart/form-data" id="form-data" class="form-horizontal">
+                                        <input type="hidden" name="file" />
+                                    </form>
+                                    <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-ptcontrolpanel" class="form-horizontal">
+                                        <input type="hidden" name="module_ptcontrolpanel_status" value="1" />
+                                        <div class="tab-content">
+                                            <div class="tab-pane active" id="tab-general">
+                                                {% for store in stores %}
+                                                    <div class="frm-field frm-field-{{ store.store_id }}">
+                                                        <div class="form-group">
+                                                            <label class="col-sm-4 control-label">{{ entry_header }}</label>
+                                                            <div class="col-sm-6">
+                                                                <select name="module_ptcontrolpanel_header_layout[{{ store.store_id }}]" class="form-control">
+                                                                    <option value="1" {% if module_ptcontrolpanel_header_layout[store.store_id] == '1' %} selected="selected" {% endif %}>{{ entry_header }} 1</option>
+                                                                    <option value="2" {% if module_ptcontrolpanel_header_layout[store.store_id] == '2' %} selected="selected" {% endif %}>{{ entry_header }} 2</option>
+                                                                    <option value="3" {% if module_ptcontrolpanel_header_layout[store.store_id] == '3' %} selected="selected" {% endif %}>{{ entry_header }} 3</option>
+                                                                    <option value="4" {% if module_ptcontrolpanel_header_layout[store.store_id] == '4' %} selected="selected" {% endif %}>{{ entry_header }} 4</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label class="col-sm-4 control-label">{{ entry_responsive }}</label>
+                                                            <div class="col-sm-6">
+                                                                <select name="module_ptcontrolpanel_responsive_type[{{ store.store_id }}]" class="form-control">
+                                                                    <option value="responsive" {% if module_ptcontrolpanel_responsive_type[store.store_id] == 'responsive' %} selected="selected" {% endif %}>{{ text_responsive_layout }}</option>
+                                                                    <option value="specified" {% if module_ptcontrolpanel_responsive_type[store.store_id] == 'specified' %} selected="selected" {% endif %}>{{ text_specified_layout }}</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label class="col-sm-4 control-label">{{ entry_sticky_header }}</label>
+                                                            <div class="col-sm-6">
+                                                                <input type="hidden" name="module_ptcontrolpanel_sticky_header[{{ store.store_id }}]" value="0" />
+                                                                <input type="checkbox" class="ckb-switch" name="module_ptcontrolpanel_sticky_header[{{ store.store_id }}]"
+                                                                       data-toggle="toggle" data-on="{{ text_enabled }}" data-off="{{ text_disabled }}" data-width="100" data-height="36"
+                                                                        {% if module_ptcontrolpanel_sticky_header[store.store_id] %} value="1" checked {% else %} value="0" {% endif %}>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label class="col-sm-4 control-label">{{ entry_scroll_top }}</label>
+                                                            <div class="col-sm-6">
+                                                                <input type="hidden" name="module_ptcontrolpanel_scroll_top[{{ store.store_id }}]" value="0" />
+                                                                <input type="checkbox" class="ckb-switch" name="module_ptcontrolpanel_scroll_top[{{ store.store_id }}]"
+                                                                       data-toggle="toggle" data-on="{{ text_enabled }}" data-off="{{ text_disabled }}" data-width="100" data-height="36"
+                                                                        {% if module_ptcontrolpanel_scroll_top[store.store_id] %} value="1" checked {% else %} value="0" {% endif %}>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label class="col-sm-4 control-label">{{ entry_lazy_load }}</label>
+                                                            <div class="col-sm-6">
+                                                                <input type="hidden" name="module_ptcontrolpanel_lazy_load[{{ store.store_id }}]" value="0" />
+                                                                <input type="checkbox" class="ckb-switch" name="module_ptcontrolpanel_lazy_load[{{ store.store_id }}]"
+                                                                       data-toggle="toggle" data-on="{{ text_enabled }}" data-off="{{ text_disabled }}" data-width="100" data-height="36"
+                                                                        {% if module_ptcontrolpanel_lazy_load[store.store_id] %} value="1" checked {% else %} value="0" {% endif %}>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label class="col-sm-4 control-label">{{ entry_loader_image }}</label>
+                                                            <div class="col-sm-6">
+                                                                <a href="" id="thumb-image{{ store.store_id }}" data-toggle="image" class="img-thumbnail"><img src="{{ thumb[store.store_id] }}" alt="" title=""  /></a>
+                                                                <input type="hidden" id="input-image{{ store.store_id }}" name="module_ptcontrolpanel_loader_img[{{ store.store_id }}]" value="{{ module_ptcontrolpanel_loader_img[store.store_id] }}" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                {% endfor %}
+                                            </div>
+
+                                            <div class="tab-pane" id="tab-font">
+                                                {% for store in stores %}
+                                                    <div class="frm-field frm-field-{{ store.store_id }}">
+                                                        <ul class="nav nav-tabs hoz-ul-sections">
+                                                            <li class="active"><a href="#tab-body-{{ store.store_id }}" data-toggle="tab">{{ tab_body }}</a></li>
+                                                            <li><a href="#tab-header-{{ store.store_id }}" data-toggle="tab">{{ tab_heading }}</a></li>
+                                                            <li><a href="#tab-link-{{ store.store_id }}" data-toggle="tab">{{ tab_link }}</a></li>
+                                                            <li><a href="#tab-button-{{ store.store_id }}" data-toggle="tab">{{ tab_button }}</a></li>
+                                                        </ul>
+
+                                                        <div class="tab-content child-content">
+                                                            <div class="tab-pane active" id="tab-body-{{ store.store_id }}">
+                                                                <div class="form-group">
+                                                                    <div class="col-sm-3"></div>
+                                                                    <div class="col-sm-6">
+                                                                        <p class="font-body-demo-{{ store.store_id }} font-demo">A B C D E F G H I J K L M N O P Q R S T U V W X Y Z <br />
+                                                                            a b c d e f g h i j k l m n o p q r s t u v w x y z <br />
+                                                                            0 1 2 3 4 5 6 7 8 9</p>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="form-group font-control">
+                                                                    <label class="col-sm-3 control-label">{{ entry_global_font }}</label>
+                                                                    <div class="col-sm-6">
+                                                                        <select class="form-control" name="module_ptcontrolpanel_body_font_family_id[{{ store.store_id }}]" onchange="chooseBodyFont(this.value, {{ store.store_id }})">
+                                                                            <option value="10000" {% if module_ptcontrolpanel_body_font_family_id[store.store_id] == 10000 %} selected="selected" {% endif %}>{{ text_choose_font }}</option>
+                                                                            {% for font in fonts %}
+                                                                                <option value="{{ font.id }}" {% if module_ptcontrolpanel_body_font_family_id[store.store_id] == font.id %} selected="selected" {% endif %}
+                                                                                        id="body-font-{{ font.id }}" data-family="{{ font.family }}" data-family-val="{{ font.family_val }}"
+                                                                                        data-variants="{{ font.variants }}" data-subsets="{{ font.subsets }}" data-category="{{ font.category }}">
+                                                                                    {{ font.family }}
+                                                                                </option>
+                                                                            {% endfor %}
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="col-sm-3">
+                                                                        <input type="checkbox" id="body-font-disable" name="module_ptcontrolpanel_body_font_disable[{{ store.store_id }}]" {% if module_ptcontrolpanel_body_font_disable[store.store_id] %} checked="checked" {% endif %} /> {{ entry_font_disable }}
+                                                                    </div>
+
+                                                                    <input type="hidden" id="body-font-family-name-{{ store.store_id }}" name="module_ptcontrolpanel_body_font_family_name[{{ store.store_id }}]" value="{{ module_ptcontrolpanel_body_font_family_name[store.store_id] }}" />
+                                                                    <input type="hidden" id="body-font-family-cate-{{ store.store_id }}" name="module_ptcontrolpanel_body_font_family_cate[{{ store.store_id }}]" value="{{ module_ptcontrolpanel_body_font_family_cate[store.store_id] }}" />
+                                                                    <input type="hidden" id="body-font-family-link-{{ store.store_id }}" name="module_ptcontrolpanel_body_font_family_link[{{ store.store_id }}]" value="{{ module_ptcontrolpanel_body_font_family_link[store.store_id] }}" />
+                                                                </div>
+
+                                                                <div class="form-group">
+                                                                    <label class="col-sm-3 control-label">{{ entry_font_size }}</label>
+                                                                    <div class="col-sm-6">
+                                                                        <input class="form-control" type="text" name="module_ptcontrolpanel_body_font_size[{{ store.store_id }}]" value="{{ module_ptcontrolpanel_body_font_size[store.store_id] }}" />
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="form-group">
+                                                                    <label class="col-sm-3 control-label">{{ entry_font_weight }}</label>
+                                                                    <div class="col-sm-6">
+                                                                        <select class="form-control" id="body-font-weight-{{ store.store_id }}" name="module_ptcontrolpanel_body_font_weight[{{ store.store_id }}]" onclick="chooseBodyWeight(this.value, {{ store.store_id }})">
+                                                                            <option value="300" {% if module_ptcontrolpanel_body_font_weight[store.store_id] == '300' %}selected="selected"{% endif %}>300</option>
+                                                                            <option value="400" {% if module_ptcontrolpanel_body_font_weight[store.store_id] == '400' %}selected="selected"{% endif %}>400</option>
+                                                                            <option value="500" {% if module_ptcontrolpanel_body_font_weight[store.store_id] == '500' %}selected="selected"{% endif %}>500</option>
+                                                                            <option value="600" {% if module_ptcontrolpanel_body_font_weight[store.store_id] == '600' %}selected="selected"{% endif %}>600</option>
+                                                                            <option value="700" {% if module_ptcontrolpanel_body_font_weight[store.store_id] == '700' %}selected="selected"{% endif %}>700</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="form-group">
+                                                                    <label class="col-sm-3 control-label">{{ entry_color }}</label>
+                                                                    <div class="col-sm-3">
+                                                                        <input class="form-control jscolor" type="text" name="module_ptcontrolpanel_body_color[{{ store.store_id }}]" value="{{ module_ptcontrolpanel_body_color[store.store_id] }}" />
+                                                                    </div>
+                                                                </div>
+																
+																<div class="form-group">
+                                                                    <label class="col-sm-3 control-label">{{ entry_primary_color }}</label>
+                                                                    <div class="col-sm-3">
+                                                                        <input class="form-control jscolor" type="text" name="module_ptcontrolpanel_link_hover_color[{{ store.store_id }}]" value="{{ module_ptcontrolpanel_link_hover_color[store.store_id] }}" />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="tab-pane" id="tab-header-{{ store.store_id }}">
+                                                                <div class="form-group">
+                                                                    <div class="col-sm-3"></div>
+                                                                    <div class="col-sm-6">
+                                                                        <p class="font-heading-demo-{{ store.store_id }} font-demo">A B C D E F G H I J K L M N O P Q R S T U V W X Y Z <br />
+                                                                            a b c d e f g h i j k l m n o p q r s t u v w x y z <br />
+                                                                            0 1 2 3 4 5 6 7 8 9</p>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="form-group font-control">
+                                                                    <label class="col-sm-3 control-label">{{ entry_heading_font }}</label>
+                                                                    <div class="col-sm-6">
+                                                                        <select class="form-control" name="module_ptcontrolpanel_heading_font_family_id[{{ store.store_id }}]" onchange="chooseHeadingFont(this.value, {{ store.store_id }})">
+                                                                            <option value="10000" {% if module_ptcontrolpanel_heading_font_family_id[store.store_id] == 10000 %} selected="selected" {% endif %}>{{ text_choose_font }}</option>
+                                                                            {% for font in fonts %}
+                                                                                <option value="{{ font.id }}" {% if module_ptcontrolpanel_heading_font_family_id[store.store_id] == font.id %} selected="selected" {% endif %}
+                                                                                        id="heading-font-{{ font.id }}" data-family="{{ font.family }}" data-family-val="{{ font.family_val }}"
+                                                                                        data-variants="{{ font.variants }}" data-subsets="{{ font.subsets }}" data-category="{{ font.category }}">
+                                                                                    {{ font.family }}
+                                                                                </option>
+                                                                            {% endfor %}
+                                                                        </select>
+                                                                    </div>
+
+                                                                    <div class="col-sm-3">
+                                                                        <input type="checkbox" id="heading-font-disable" name="module_ptcontrolpanel_heading_font_disable[{{ store.store_id }}]" {% if module_ptcontrolpanel_heading_font_disable[store.store_id] %} checked="checked" {% endif %} /> {{ entry_font_disable }}
+                                                                    </div>
+
+                                                                    <input type="hidden" id="heading-font-family-name-{{ store.store_id }}" name="module_ptcontrolpanel_heading_font_family_name[{{ store.store_id }}]" value="{{ module_ptcontrolpanel_heading_font_family_name[store.store_id] }}" />
+                                                                    <input type="hidden" id="heading-font-family-cate-{{ store.store_id }}" name="module_ptcontrolpanel_heading_font_family_cate[{{ store.store_id }}]" value="{{ module_ptcontrolpanel_heading_font_family_cate[store.store_id] }}" />
+                                                                    <input type="hidden" id="heading-font-family-link-{{ store.store_id }}" name="module_ptcontrolpanel_heading_font_family_link[{{ store.store_id }}]" value="{{ module_ptcontrolpanel_heading_font_family_link[store.store_id] }}" />
+                                                                </div>
+
+                                                                <div class="form-group">
+                                                                    <label class="col-sm-3 control-label">{{ entry_font_weight }}</label>
+                                                                    <div class="col-sm-6">
+                                                                        <select class="form-control" id="heading-font-weight-{{ store.store_id }}" name="module_ptcontrolpanel_heading_font_weight[{{ store.store_id }}]" onchange="chooseHeadingWeight(this.value, {{ store.store_id }})">
+                                                                            <option value="300" {% if module_ptcontrolpanel_heading_font_weight[store.store_id] == '300' %}selected="selected"{% endif %}>300</option>
+                                                                            <option value="400" {% if module_ptcontrolpanel_heading_font_weight[store.store_id] == '400' %}selected="selected"{% endif %}>400</option>
+                                                                            <option value="500" {% if module_ptcontrolpanel_heading_font_weight[store.store_id] == '500' %}selected="selected"{% endif %}>500</option>
+                                                                            <option value="600" {% if module_ptcontrolpanel_heading_font_weight[store.store_id] == '600' %}selected="selected"{% endif %}>600</option>
+                                                                            <option value="700" {% if module_ptcontrolpanel_heading_font_weight[store.store_id] == '700' %}selected="selected"{% endif %}>700</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="form-group">
+                                                                    <label class="col-sm-3 control-label">{{ entry_color }}</label>
+                                                                    <div class="col-sm-3">
+                                                                        <input class="form-control jscolor" type="text" name="module_ptcontrolpanel_heading_color[{{ store.store_id }}]" value="{{ module_ptcontrolpanel_heading_color[store.store_id] }}" />
+                                                                    </div>
+                                                                </div>
+																
+																
+                                                            </div>
+
+                                                            <div class="tab-pane" id="tab-link-{{ store.store_id }}">
+                                                                <div class="form-group">
+                                                                    <label class="col-sm-4 control-label">{{ entry_color }}</label>
+                                                                    <div class="col-sm-3">
+                                                                        <input class="form-control jscolor" type="text" name="module_ptcontrolpanel_link_color[{{ store.store_id }}]" value="{{ module_ptcontrolpanel_link_color[store.store_id] }}" />
+                                                                    </div>
+                                                                </div>
+
+                                                                
+                                                            </div>
+
+                                                            <div class="tab-pane" id="tab-button-{{ store.store_id }}">
+                                                                <div class="form-group">
+                                                                    <label class="col-sm-4 control-label">{{ entry_color }}</label>
+                                                                    <div class="col-sm-3">
+                                                                        <input class="form-control jscolor" type="text" name="module_ptcontrolpanel_button_color[{{ store.store_id }}]" value="{{ module_ptcontrolpanel_button_color[store.store_id] }}" />
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="form-group">
+                                                                    <label class="col-sm-4 control-label">{{ entry_hover_color }}</label>
+                                                                    <div class="col-sm-3">
+                                                                        <input class="form-control jscolor" type="text" name="module_ptcontrolpanel_button_hover_color[{{ store.store_id }}]" value="{{ module_ptcontrolpanel_button_hover_color[store.store_id] }}" />
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="form-group">
+                                                                    <label class="col-sm-4 control-label">{{ entry_bg_color }}</label>
+                                                                    <div class="col-sm-3">
+                                                                        <input class="form-control jscolor" type="text" name="module_ptcontrolpanel_button_bg_color[{{ store.store_id }}]" value="{{ module_ptcontrolpanel_button_bg_color[store.store_id] }}" />
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="form-group">
+                                                                    <label class="col-sm-4 control-label">{{ entry_bg_hover_color }}</label>
+                                                                    <div class="col-sm-3">
+                                                                        <input class="form-control jscolor" type="text" name="module_ptcontrolpanel_button_bg_hover_color[{{ store.store_id }}]" value="{{ module_ptcontrolpanel_button_bg_hover_color[store.store_id] }}" />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                {% endfor %}
+                                                <input type="hidden" value="{{ entry_font_weight }}" id="text-font-weight" />
+                                                <input type="hidden" value="{{ entry_font_subset }}" id="text-font-subset" />
+                                            </div>
+
+                                            <div class="tab-pane" id="tab-product">
+                                                {% for store in stores %}
+                                                    <div class="frm-field frm-field-{{ store.store_id }}">
+                                                        <div class="form-group">
+                                                            <label class="col-sm-4 control-label" for="input-related-{{ store.store_id }}">{{ entry_related_pro }}</label>
+                                                            <div class="col-sm-6">
+                                                                <input type="hidden" name="module_ptcontrolpanel_related[{{ store.store_id }}]" value="0" />
+                                                                <input type="checkbox" class="ckb-switch" name="module_ptcontrolpanel_related[{{ store.store_id }}]" id="input-related-{{ store.store_id }}"
+                                                                       data-toggle="toggle" data-on="{{ text_enabled }}" data-off="{{ text_disabled }}" data-width="100" data-height="36" data-store-id="{{ store.store_id }}"
+                                                                        {% if module_ptcontrolpanel_related[store.store_id] %} value="1" checked {% else %} value="0" {% endif %}>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label class="col-sm-4 control-label" for="input-social-{{ store.store_id }}">{{ entry_social_icons }}</label>
+                                                            <div class="col-sm-6">
+                                                                <input type="hidden" name="module_ptcontrolpanel_social[{{ store.store_id }}]" value="0" />
+                                                                <input type="checkbox" class="ckb-switch" name="module_ptcontrolpanel_social[{{ store.store_id }}]" id="input-social-{{ store.store_id }}"
+                                                                       data-toggle="toggle" data-on="{{ text_enabled }}" data-off="{{ text_disabled }}" data-width="100" data-height="36" data-store-id="{{ store.store_id }}"
+                                                                        {% if module_ptcontrolpanel_social[store.store_id] %} value="1" checked {% else %} value="0" {% endif %}>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label class="col-sm-4 control-label" for="input-tax-{{ store.store_id }}">{{ entry_tax }}</label>
+                                                            <div class="col-sm-6">
+                                                                <input type="hidden" name="module_ptcontrolpanel_tax[{{ store.store_id }}]" value="0" />
+                                                                <input type="checkbox" class="ckb-switch" name="module_ptcontrolpanel_tax[{{ store.store_id }}]" id="input-tax-{{ store.store_id }}"
+                                                                       data-toggle="toggle" data-on="{{ text_enabled }}" data-off="{{ text_disabled }}" data-width="100" data-height="36" data-store-id="{{ store.store_id }}"
+                                                                        {% if module_ptcontrolpanel_tax[store.store_id] %} value="1" checked {% else %} value="0" {% endif %}>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label class="col-sm-4 control-label" for="input-tags-{{ store.store_id }}">{{ entry_tags }}</label>
+                                                            <div class="col-sm-6">
+                                                                <input type="hidden" name="module_ptcontrolpanel_tags[{{ store.store_id }}]" value="0" />
+                                                                <input type="checkbox" class="ckb-switch" name="module_ptcontrolpanel_tags[{{ store.store_id }}]" id="input-tags-{{ store.store_id }}"
+                                                                       data-toggle="toggle" data-on="{{ text_enabled }}" data-off="{{ text_disabled }}" data-width="100" data-height="36" data-store-id="{{ store.store_id }}"
+                                                                        {% if module_ptcontrolpanel_tags[store.store_id] %} value="1" checked {% else %} value="0" {% endif %}>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label class="col-sm-4 control-label" for="input-zoom-{{ store.store_id }}">{{ entry_use_zoom }}</label>
+                                                            <div class="col-sm-6">
+                                                                <input type="hidden" name="module_ptcontrolpanel_use_zoom[{{ store.store_id }}]" value="0" />
+                                                                <input type="checkbox" class="ckb-switch zoom-status" name="module_ptcontrolpanel_use_zoom[{{ store.store_id }}]" id="input-zoom-{{ store.store_id }}"
+                                                                       data-toggle="toggle" data-on="{{ text_enabled }}" data-off="{{ text_disabled }}" data-width="100" data-height="36" data-store-id="{{ store.store_id }}"
+                                                                        {% if module_ptcontrolpanel_use_zoom[store.store_id] %} value="1" checked {% else %} value="0" {% endif %}>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label class="col-sm-4 control-label" for="input-zoom-type-{{ store.store_id }}">{{ entry_zoom_type }}</label>
+                                                            <div class="col-sm-6">
+                                                                <select name="module_ptcontrolpanel_zoom_type[{{ store.store_id }}]" id="input-zoom-type-{{ store.store_id }}" class="form-control">
+                                                                    <option value="outer" {% if module_ptcontrolpanel_zoom_type[store.store_id] == 'outer' %}selected="selected"{% endif %}>{{ text_outside }}</option>
+                                                                    <option value="inner" {% if module_ptcontrolpanel_zoom_type[store.store_id] == 'inner' %}selected="selected"{% endif %}>{{ text_inside }}</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label class="col-sm-4 control-label" for="input-zoom-space-{{ store.store_id }}">{{ entry_zoom_space }}</label>
+                                                            <div class="col-sm-6">
+                                                                <input type="text" id="input-zoom-space-{{ store.store_id }}" class="form-control" name="module_ptcontrolpanel_zoom_space[{{ store.store_id }}]" value="{{ module_ptcontrolpanel_zoom_space[store.store_id] }}" placeholder="{{ text_zoom_space }}" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="col-sm-4 control-label" for="input-zoom-title-{{ store.store_id }}">{{ entry_zoom_title }}</label>
+                                                            <div class="col-sm-6">
+                                                                <input type="hidden" name="module_ptcontrolpanel_zoom_title[{{ store.store_id }}]" value="0" />
+                                                                <input type="checkbox" class="ckb-switch" name="module_ptcontrolpanel_zoom_title[{{ store.store_id }}]" id="input-zoom-title-{{ store.store_id }}"
+                                                                       data-toggle="toggle" data-on="{{ text_enabled }}" data-off="{{ text_disabled }}" data-width="100" data-height="36" data-store-id="{{ store.store_id }}"
+                                                                        {% if module_ptcontrolpanel_zoom_title[store.store_id] %} value="1" checked {% else %} value="0" {% endif %}>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label class="col-sm-4 control-label" for="input-swatches-{{ store.store_id }}">{{ entry_use_swatches }}</label>
+                                                            <div class="col-sm-6">
+                                                                <input type="hidden" name="module_ptcontrolpanel_use_swatches[{{ store.store_id }}]" value="0" />
+                                                                <input type="checkbox" class="ckb-switch" name="module_ptcontrolpanel_use_swatches[{{ store.store_id }}]" id="input-swatches-{{ store.store_id }}"
+                                                                       data-toggle="toggle" data-on="{{ text_enabled }}" data-off="{{ text_disabled }}" data-width="100" data-height="36" data-store-id="{{ store.store_id }}"
+                                                                        {% if module_ptcontrolpanel_use_swatches[store.store_id] %} value="1" checked {% else %} value="0" {% endif %}>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label class="col-sm-4 control-label" for="input-dimension-{{ store.store_id }}">{{ entry_icon_swatches }}</label>
+                                                            <div class="col-sm-3">
+                                                                <input type="text" value="{{ module_ptcontrolpanel_swatches_width[store.store_id] }}" name="module_ptcontrolpanel_swatches_width[{{ store.store_id }}]" placeholder="{{ entry_width }}" class="form-control" />
+                                                            </div>
+                                                            <div class="col-sm-3">
+                                                                <input type="text" value="{{ module_ptcontrolpanel_swatches_height[store.store_id] }}" name="module_ptcontrolpanel_swatches_height[{{ store.store_id }}]" placeholder="{{ entry_height }}" class="form-control" />
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label class="col-sm-4 control-label" for="input-color-option-{{ store.store_id }}">{{ entry_color_option }}</label>
+                                                            <div class="col-sm-6">
+                                                                <select name="module_ptcontrolpanel_swatches_option[{{ store.store_id }}]" id="input-color-option-{{ store.store_id }}" class="form-control">
+                                                                    {% for option in options %}
+                                                                        {% if option.type == 'select' or option.type == 'radio' %}
+                                                                            <option value="{{ option.option_id }}" {% if module_ptcontrolpanel_swatches_option[store.store_id] == option.option_id %} selected="selected" {% endif %}>{{ option.name }}</option>
+                                                                        {% endif %}
+                                                                    {% endfor %}
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                {% endfor %}
+                                            </div>
+
+                                            <div class="tab-pane" id="tab-category">
+                                                {% for store in stores %}
+                                                    <div class="frm-field frm-field-{{ store.store_id }}">
+                                                        <div class="form-group">
+                                                            <label class="col-sm-4 control-label" for="input-category-image-{{ store.store_id }}">{{ entry_category_image }}</label>
+                                                            <div class="col-sm-6">
+                                                                <input type="hidden" name="module_ptcontrolpanel_category_image[{{ store.store_id }}]" value="0" />
+                                                                <input type="checkbox" class="ckb-switch" name="module_ptcontrolpanel_category_image[{{ store.store_id }}]" id="input-category-image-{{ store.store_id }}"
+                                                                       data-toggle="toggle" data-on="{{ text_enabled }}" data-off="{{ text_disabled }}" data-width="100" data-height="36" data-store-id="{{ store.store_id }}"
+                                                                        {% if module_ptcontrolpanel_category_image[store.store_id] %} value="1" checked {% else %} value="0" {% endif %}>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label class="col-sm-4 control-label" for="input-category-des-{{ store.store_id }}">{{ entry_category_des }}</label>
+                                                            <div class="col-sm-6">
+                                                                <input type="hidden" name="module_ptcontrolpanel_category_description[{{ store.store_id }}]" value="0" />
+                                                                <input type="checkbox" class="ckb-switch" name="module_ptcontrolpanel_category_description[{{ store.store_id }}]" id="input-category-des-{{ store.store_id }}"
+                                                                       data-toggle="toggle" data-on="{{ text_enabled }}" data-off="{{ text_disabled }}" data-width="100" data-height="36" data-store-id="{{ store.store_id }}"
+                                                                        {% if module_ptcontrolpanel_category_description[store.store_id] %} value="1" checked {% else %} value="0" {% endif %}>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label class="col-sm-4 control-label" for="input-category-sub-{{ store.store_id }}">{{ entry_sub_category }}</label>
+                                                            <div class="col-sm-6">
+                                                                <input type="hidden" name="module_ptcontrolpanel_sub_category[{{ store.store_id }}]" value="0" />
+                                                                <input type="checkbox" class="ckb-switch" name="module_ptcontrolpanel_sub_category[{{ store.store_id }}]" id="input-category-sub-{{ store.store_id }}"
+                                                                       data-toggle="toggle" data-on="{{ text_enabled }}" data-off="{{ text_disabled }}" data-width="100" data-height="36" data-store-id="{{ store.store_id }}"
+                                                                        {% if module_ptcontrolpanel_sub_category[store.store_id] %} value="1" checked {% else %} value="0" {% endif %}>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label class="col-sm-4 control-label" for="input-filter-{{ store.store_id }}">{{ entry_filter }}</label>
+                                                            <div class="col-sm-2">
+                                                                <input type="hidden" name="module_ptcontrolpanel_use_filter[{{ store.store_id }}]" value="0" />
+                                                                <input type="checkbox" class="ckb-switch" name="module_ptcontrolpanel_use_filter[{{ store.store_id }}]" id="input-filter-{{ store.store_id }}"
+                                                                       data-toggle="toggle" data-on="{{ text_enabled }}" data-off="{{ text_disabled }}" data-width="100" data-height="36" data-store-id="{{ store.store_id }}"
+                                                                        {% if module_ptcontrolpanel_use_filter[store.store_id] %} value="1" checked {% else %} value="0" {% endif %}>
+                                                            </div>
+                                                            <label class="col-sm-2 control-label">{{ entry_position }}</label>
+                                                            <div class="col-sm-2">
+                                                                <select name="module_ptcontrolpanel_filter_position[{{ store.store_id }}]" class="form-control">
+                                                                    <option value="left" {% if module_ptcontrolpanel_filter_position[store.store_id] == 'left' %} selected="selected" {% endif %}>{{ text_left }}</option>
+                                                                    <option value="right" {% if module_ptcontrolpanel_filter_position[store.store_id] == 'right' %} selected="selected" {% endif %}>{{ text_right }}</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label class="col-sm-4 control-label" for="input-cquickview-{{ store.store_id }}">{{ entry_quickview }}</label>
+                                                            <div class="col-sm-6">
+                                                                <input type="hidden" name="module_ptcontrolpanel_cate_quickview[{{ store.store_id }}]" value="0" />
+                                                                <input type="checkbox" class="ckb-switch" name="module_ptcontrolpanel_cate_quickview[{{ store.store_id }}]" id="input-cquickview-{{ store.store_id }}"
+                                                                       data-toggle="toggle" data-on="{{ text_enabled }}" data-off="{{ text_disabled }}" data-width="100" data-height="36" data-store-id="{{ store.store_id }}"
+                                                                        {% if module_ptcontrolpanel_cate_quickview[store.store_id] %} value="1" checked {% else %} value="0" {% endif %}>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label class="col-sm-4 control-label" for="input-image-effect-{{ store.store_id }}">{{ entry_img_effect }}</label>
+                                                            <div class="col-sm-6">
+                                                                <select name="module_ptcontrolpanel_img_effect[{{ store.store_id }}]" id="input-image-effect-{{ store.store_id }}" class="form-control">
+                                                                    <option value="none" {% if module_ptcontrolpanel_img_effect[store.store_id] == 'none' %}selected="selected" {% endif %}>{{ text_none }}</option>
+                                                                    <option value="hover" {% if module_ptcontrolpanel_img_effect[store.store_id] == 'hover' %}selected="selected" {% endif %}>{{ text_hover_img }}</option>
+                                                                    <option value="swatches" {% if module_ptcontrolpanel_img_effect[store.store_id] == 'swatches' %}selected="selected" {% endif %}>{{ text_swatches_img }}</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="col-sm-4 control-label">{{ entry_icon_swatches }}</label>
+                                                            <div class="col-sm-3">
+                                                                <input type="text" value="{{ module_ptcontrolpanel_cate_swatches_width[store.store_id] }}" name="module_ptcontrolpanel_cate_swatches_width[{{ store.store_id }}]" placeholder="{{ entry_width }}" class="form-control" />
+                                                            </div>
+                                                            <div class="col-sm-3">
+                                                                <input type="text" value="{{ module_ptcontrolpanel_cate_swatches_height[store.store_id] }}" name="module_ptcontrolpanel_cate_swatches_height[{{ store.store_id }}]" placeholder="{{ entry_height }}" class="form-control" />
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label class="col-sm-4 control-label" for="input-view-{{ store.store_id }}">{{ entry_advance_view }}</label>
+                                                            <div class="col-sm-6">
+                                                                <input type="hidden" name="module_ptcontrolpanel_advance_view[{{ store.store_id }}]" value="0" />
+                                                                <input type="checkbox" class="ckb-switch" name="module_ptcontrolpanel_advance_view[{{ store.store_id }}]" id="input-view-{{ store.store_id }}"
+                                                                       data-toggle="toggle" data-on="{{ text_enabled }}" data-off="{{ text_disabled }}" data-width="100" data-height="36" data-store-id="{{ store.store_id }}"
+                                                                        {% if module_ptcontrolpanel_advance_view[store.store_id] %} value="1" checked {% else %} value="0" {% endif %}>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="col-sm-4 control-label" for="input-default-view-{{ store.store_id }}">{{ entry_default_view }}</label>
+                                                            <div class="col-sm-3">
+                                                                <select name="module_ptcontrolpanel_default_view[{{ store.store_id }}]" id="input-default-view-{{ store.store_id }}" class="form-control">
+                                                                    <option value="list" {% if module_ptcontrolpanel_default_view[store.store_id] == 'list' %} selected="selected" {% endif %}>{{ text_list }}</option>
+                                                                    <option value="grid" {% if module_ptcontrolpanel_default_view[store.store_id] == 'grid' %} selected="selected" {% endif %}>{{ text_grid }}</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="col-sm-4 control-label" for="input-row-{{ store.store_id }}">{{ entry_product_row }}</label>
+                                                            <div class="col-sm-3">
+                                                                <select name="module_ptcontrolpanel_product_row[{{ store.store_id }}]" id="input-row-{{ store.store_id }}" class="form-control">
+                                                                    <option value="2" {% if module_ptcontrolpanel_product_row[store.store_id] == '2' %} selected="selected" {% endif %}>2</option>
+                                                                    <option value="3" {% if module_ptcontrolpanel_product_row[store.store_id] == '3' %} selected="selected" {% endif %}>3</option>
+                                                                    <option value="4" {% if module_ptcontrolpanel_product_row[store.store_id] == '4' %} selected="selected" {% endif %}>4</option>
+
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                {% endfor %}
+                                            </div>
+
+                                            <div class="tab-pane" id="tab-catalog">
+                                                {% for store in stores %}
+                                                    <div class="frm-field frm-field-{{ store.store_id }}">
+                                                        <ul class="nav nav-tabs hoz-ul-sections">
+                                                            <li class="active"><a href="#tab-cheader-{{ store.store_id }}" data-toggle="tab">{{ tab_header }}</a></li>
+                                                            <li><a href="#tab-product-{{ store.store_id }}" data-toggle="tab">{{ tab_product }}</a></li>
+                                                            <li><a href="#tab-category-{{ store.store_id }}" data-toggle="tab">{{ tab_product_listing }}</a></li>
+                                                        </ul>
+
+                                                        <div class="tab-content child-content">
+                                                            <div class="tab-pane active" id="tab-cheader-{{ store.store_id }}">
+                                                                <div class="form-group">
+                                                                    <label class="col-sm-4 control-label" for="input-header-cart-{{ store.store_id }}">{{ entry_cart }}</label>
+                                                                    <div class="col-sm-6">
+                                                                        <input type="hidden" name="module_ptcontrolpanel_header_cart[{{ store.store_id }}]" value="0" />
+                                                                        <input type="checkbox" class="ckb-switch" name="module_ptcontrolpanel_header_cart[{{ store.store_id }}]" id="input-header-cart-{{ store.store_id }}"
+                                                                               data-toggle="toggle" data-on="{{ text_enabled }}" data-off="{{ text_disabled }}" data-width="100" data-height="36" data-store-id="{{ store.store_id }}"
+                                                                                {% if module_ptcontrolpanel_header_cart[store.store_id] %} value="1" checked {% else %} value="0" {% endif %}>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="form-group">
+                                                                    <label class="col-sm-4 control-label" for="input-header-currency-{{ store.store_id }}">{{ entry_currency }}</label>
+                                                                    <div class="col-sm-6">
+                                                                        <input type="hidden" name="module_ptcontrolpanel_header_currency[{{ store.store_id }}]" value="0" />
+                                                                        <input type="checkbox" class="ckb-switch" name="module_ptcontrolpanel_header_currency[{{ store.store_id }}]" id="input-header-currency-{{ store.store_id }}"
+                                                                               data-toggle="toggle" data-on="{{ text_enabled }}" data-off="{{ text_disabled }}" data-width="100" data-height="36" data-store-id="{{ store.store_id }}"
+                                                                                {% if module_ptcontrolpanel_header_currency[store.store_id] %} value="1" checked {% else %} value="0" {% endif %}>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="tab-pane" id="tab-product-{{ store.store_id }}">
+                                                                <div class="form-group">
+                                                                    <label class="col-sm-4 control-label" for="input-product-price-{{ store.store_id }}">{{ entry_show_price }}</label>
+                                                                    <div class="col-sm-6">
+                                                                        <input type="hidden" name="module_ptcontrolpanel_product_price[{{ store.store_id }}]" value="0" />
+                                                                        <input type="checkbox" class="ckb-switch" name="module_ptcontrolpanel_product_price[{{ store.store_id }}]" id="input-product-price-{{ store.store_id }}"
+                                                                               data-toggle="toggle" data-on="{{ text_enabled }}" data-off="{{ text_disabled }}" data-width="100" data-height="36" data-store-id="{{ store.store_id }}"
+                                                                                {% if module_ptcontrolpanel_product_price[store.store_id] %} value="1" checked {% else %} value="0" {% endif %}>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="form-group">
+                                                                    <label class="col-sm-4 control-label" for="input-product-cart-{{ store.store_id }}">{{ entry_show_cart }}</label>
+                                                                    <div class="col-sm-6">
+                                                                        <input type="hidden" name="module_ptcontrolpanel_product_cart[{{ store.store_id }}]" value="0" />
+                                                                        <input type="checkbox" class="ckb-switch" name="module_ptcontrolpanel_product_cart[{{ store.store_id }}]" id="input-product-cart-{{ store.store_id }}"
+                                                                               data-toggle="toggle" data-on="{{ text_enabled }}" data-off="{{ text_disabled }}" data-width="100" data-height="36" data-store-id="{{ store.store_id }}"
+                                                                                {% if module_ptcontrolpanel_product_cart[store.store_id] %} value="1" checked {% else %} value="0" {% endif %}>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="form-group">
+                                                                    <label class="col-sm-4 control-label" for="input-product-wishlist-{{ store.store_id }}">{{ entry_show_wishlist }}</label>
+                                                                    <div class="col-sm-6">
+                                                                        <input type="hidden" name="module_ptcontrolpanel_product_wishlist[{{ store.store_id }}]" value="0" />
+                                                                        <input type="checkbox" class="ckb-switch" name="module_ptcontrolpanel_product_wishlist[{{ store.store_id }}]" id="input-product-wishlist-{{ store.store_id }}"
+                                                                               data-toggle="toggle" data-on="{{ text_enabled }}" data-off="{{ text_disabled }}" data-width="100" data-height="36" data-store-id="{{ store.store_id }}"
+                                                                                {% if module_ptcontrolpanel_product_wishlist[store.store_id] %} value="1" checked {% else %} value="0" {% endif %}>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="form-group">
+                                                                    <label class="col-sm-4 control-label" for="input-product-compare-{{ store.store_id }}">{{ entry_show_compare }}</label>
+                                                                    <div class="col-sm-6">
+                                                                        <input type="hidden" name="module_ptcontrolpanel_product_compare[{{ store.store_id }}]" value="0" />
+                                                                        <input type="checkbox" class="ckb-switch" name="module_ptcontrolpanel_product_compare[{{ store.store_id }}]" id="input-product-compare-{{ store.store_id }}"
+                                                                               data-toggle="toggle" data-on="{{ text_enabled }}" data-off="{{ text_disabled }}" data-width="100" data-height="36" data-store-id="{{ store.store_id }}"
+                                                                                {% if module_ptcontrolpanel_product_compare[store.store_id] %} value="1" checked {% else %} value="0" {% endif %}>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="form-group">
+                                                                    <label class="col-sm-4 control-label" for="input-product-options-{{ store.store_id }}">{{ entry_show_options }}</label>
+                                                                    <div class="col-sm-6">
+                                                                        <input type="hidden" name="module_ptcontrolpanel_product_options[{{ store.store_id }}]" value="0" />
+                                                                        <input type="checkbox" class="ckb-switch" name="module_ptcontrolpanel_product_options[{{ store.store_id }}]" id="input-product-options-{{ store.store_id }}"
+                                                                               data-toggle="toggle" data-on="{{ text_enabled }}" data-off="{{ text_disabled }}" data-width="100" data-height="36" data-store-id="{{ store.store_id }}"
+                                                                                {% if module_ptcontrolpanel_product_options[store.store_id] %} value="1" checked {% else %} value="0" {% endif %}>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="tab-pane" id="tab-category-{{ store.store_id }}">
+                                                                <div class="form-group">
+                                                                    <label class="col-sm-4 control-label" for="input-category-price-{{ store.store_id }}">{{ entry_show_price }}</label>
+                                                                    <div class="col-sm-6">
+                                                                        <input type="hidden" name="module_ptcontrolpanel_category_price[{{ store.store_id }}]" value="0" />
+                                                                        <input type="checkbox" class="ckb-switch" name="module_ptcontrolpanel_category_price[{{ store.store_id }}]" id="input-category-price-{{ store.store_id }}"
+                                                                               data-toggle="toggle" data-on="{{ text_enabled }}" data-off="{{ text_disabled }}" data-width="100" data-height="36" data-store-id="{{ store.store_id }}"
+                                                                                {% if module_ptcontrolpanel_category_price[store.store_id] %} value="1" checked {% else %} value="0" {% endif %}>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="form-group">
+                                                                    <label class="col-sm-4 control-label" for="input-category-cart-{{ store.store_id }}">{{ entry_show_cart }}</label>
+                                                                    <div class="col-sm-6">
+                                                                        <input type="hidden" name="module_ptcontrolpanel_category_cart[{{ store.store_id }}]" value="0" />
+                                                                        <input type="checkbox" class="ckb-switch" name="module_ptcontrolpanel_category_cart[{{ store.store_id }}]" id="input-category-cart-{{ store.store_id }}"
+                                                                               data-toggle="toggle" data-on="{{ text_enabled }}" data-off="{{ text_disabled }}" data-width="100" data-height="36" data-store-id="{{ store.store_id }}"
+                                                                                {% if module_ptcontrolpanel_category_cart[store.store_id] %} value="1" checked {% else %} value="0" {% endif %}>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="form-group">
+                                                                    <label class="col-sm-4 control-label" for="input-category-wishlist-{{ store.store_id }}">{{ entry_show_wishlist }}</label>
+                                                                    <div class="col-sm-6">
+                                                                        <input type="hidden" name="module_ptcontrolpanel_category_wishlist[{{ store.store_id }}]" value="0" />
+                                                                        <input type="checkbox" class="ckb-switch" name="module_ptcontrolpanel_category_wishlist[{{ store.store_id }}]" id="input-category-wishlist-{{ store.store_id }}"
+                                                                               data-toggle="toggle" data-on="{{ text_enabled }}" data-off="{{ text_disabled }}" data-width="100" data-height="36" data-store-id="{{ store.store_id }}"
+                                                                                {% if module_ptcontrolpanel_category_wishlist[store.store_id] %} value="1" checked {% else %} value="0" {% endif %}>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="form-group">
+                                                                    <label class="col-sm-4 control-label" for="input-category-compare-{{ store.store_id }}">{{ entry_show_compare }}</label>
+                                                                    <div class="col-sm-6">
+                                                                        <input type="hidden" name="module_ptcontrolpanel_category_compare[{{ store.store_id }}]" value="0" />
+                                                                        <input type="checkbox" class="ckb-switch" name="module_ptcontrolpanel_category_compare[{{ store.store_id }}]" id="input-category-compare-{{ store.store_id }}"
+                                                                               data-toggle="toggle" data-on="{{ text_enabled }}" data-off="{{ text_disabled }}" data-width="100" data-height="36" data-store-id="{{ store.store_id }}"
+                                                                                {% if module_ptcontrolpanel_category_compare[store.store_id] %} value="1" checked {% else %} value="0" {% endif %}>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="form-group">
+                                                                    <label class="col-sm-4 control-label" for="input-category-prodes-{{ store.store_id }}">{{ entry_product_des }}</label>
+                                                                    <div class="col-sm-6">
+                                                                        <input type="hidden" name="module_ptcontrolpanel_category_prodes[{{ store.store_id }}]" value="0" />
+                                                                        <input type="checkbox" class="ckb-switch" name="module_ptcontrolpanel_category_prodes[{{ store.store_id }}]" id="input-category-prodes-{{ store.store_id }}"
+                                                                               data-toggle="toggle" data-on="{{ text_enabled }}" data-off="{{ text_disabled }}" data-width="100" data-height="36" data-store-id="{{ store.store_id }}"
+                                                                                {% if module_ptcontrolpanel_category_prodes[store.store_id] %} value="1" checked {% else %} value="0" {% endif %}>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="form-group">
+                                                                    <label class="col-sm-4 control-label" for="input-category-label-{{ store.store_id }}">{{ entry_label }}</label>
+                                                                    <div class="col-sm-6">
+                                                                        <input type="hidden" name="module_ptcontrolpanel_category_label[{{ store.store_id }}]" value="0" />
+                                                                        <input type="checkbox" class="ckb-switch" name="module_ptcontrolpanel_category_label[{{ store.store_id }}]" id="input-category-label-{{ store.store_id }}"
+                                                                               data-toggle="toggle" data-on="{{ text_enabled }}" data-off="{{ text_disabled }}" data-width="100" data-height="36" data-store-id="{{ store.store_id }}"
+                                                                                {% if module_ptcontrolpanel_category_label[store.store_id] %} value="1" checked {% else %} value="0" {% endif %}>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                {% endfor %}
+                                            </div>
+
+                                            <div class="tab-pane" id="tab-advance">
+                                                {% for store in stores %}
+                                                    <div class="frm-field frm-field-{{ store.store_id }}">
+                                                        <div class="form-group" style="display:none;">
+                                                            <label class="col-sm-3 control-label" for="input-theme">{{ entry_theme_database }}</label>
+                                                            <div class="col-sm-9">
+                                                                <div class="row">
+                                                                    <div class="col-sm-6">
+                                                                        <select id="input-theme" class="form-control" name="file">
+                                                                            {% for key, value in database %}
+                                                                                <option value="{{ key }}">{{ value }}</option>
+                                                                            {% endfor %}
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="col-sm-6">
+                                                                        <button type="button" id="button-import" class="btn btn-primary btn-theme-option"><i class="fa fa-upload"></i> {{ button_import }}</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label" for="input-theme">{{ entry_custom_css }}</label>
+                                                            <div class="col-sm-9">
+                                                                <textarea class="form-control code-area" rows="15" name="module_ptcontrolpanel_custom_css[{{ store.store_id }}]">{{ module_ptcontrolpanel_custom_css[store.store_id] }}</textarea>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label" for="input-theme">{{ entry_custom_js }}</label>
+                                                            <div class="col-sm-9">
+                                                                <textarea class="form-control code-area" rows="15" name="module_ptcontrolpanel_custom_js[{{ store.store_id }}]">{{ module_ptcontrolpanel_custom_js[store.store_id] }}</textarea>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="body-stylesheet-link"></div>
+<div class="heading-stylesheet-link"></div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.frm-field').hide();
+        $('.frm-field-0').show();
+
+        $('#input-store').change(function () {
+            $('.frm-field').hide();
+            var store = $(this).val();
+            $('.frm-field-' + store).show();
+        })
+
+
+        $('.toggle.btn').on('click', function () {
+            var ckb_status = parseInt($(this).find('.ckb-switch').val());
+            if(ckb_status == 1) {
+                $(this).find('.ckb-switch').val('0');
+            } else {
+                $(this).find('.ckb-switch').val('1');
+            }
+        });
+
+        {% for store in stores %}
+            /* Body */
+            var body_font_css_link_{{ store.store_id }} = $('#body-font-family-link-{{ store.store_id }}').val();
+            var body_font_stylesheet_link_{{ store.store_id }} = '<link href="' + body_font_css_link_{{ store.store_id }} + '" rel="stylesheet">';
+            var body_family_{{ store.store_id }} =  $('#body-font-family-name-{{ store.store_id }}').val();
+            var body_category_{{ store.store_id }} =  $('#body-font-family-cate-{{ store.store_id }}').val();
+            var body_font_weight{{ store.store_id }} = $('#body-font-weight-{{ store.store_id }}').val();
+
+            $('.body-stylesheet-link').append(body_font_stylesheet_link_{{ store.store_id }});
+            $('.font-body-demo-{{ store.store_id }}').css("font-family", "'" + body_family_{{ store.store_id }} + "', " + body_category_{{ store.store_id }});
+            $('.font-body-demo-{{ store.store_id }}').css("font-weight", body_font_weight{{ store.store_id }});
+
+            /* Heading */
+            var heading_font_css_link_{{ store.store_id }} = $('#heading-font-family-link-{{ store.store_id }}').val();
+            var heading_font_stylesheet_link_{{ store.store_id }} = '<link href="' + heading_font_css_link_{{ store.store_id }} + '" rel="stylesheet">';
+            var heading_family_{{ store.store_id }} =  $('#heading-font-family-name-{{ store.store_id }}').val();
+            var heading_category_{{ store.store_id }} =  $('#heading-font-family-cate-{{ store.store_id }}').val();
+            var heading_font_weight{{ store.store_id }} = $('#heading-font-weight-{{ store.store_id }}').val();
+
+            $('.heading-stylesheet-link').append(heading_font_stylesheet_link_{{ store.store_id }});
+            $('.font-heading-demo-{{ store.store_id }}').css("font-family", "'" + heading_family_{{ store.store_id }} + "', " + heading_category_{{ store.store_id }});
+            $('.font-heading-demo-{{ store.store_id }}').css("font-weight", heading_font_weight{{ store.store_id }});
+        {% endfor %}
+    });
+
+    function chooseBodyFont(id, store_id) {
+        var family = $("#body-font-" + id).data('family');
+        var family_val = $("#body-font-" + id).data('family-val');
+        var variants = $("#body-font-" + id).data('variants');
+        var subsets = $("#body-font-" + id).data('subsets');
+        var category = $("#body-font-" + id).data('category');
+
+        var font_css_link = 'https://fonts.googleapis.com/css?family=' + family_val + ":" + variants + '&subset=' + subsets;
+        var font_stylesheet_link = '<link href="' + font_css_link + '" rel="stylesheet">';
+
+        $('.body-stylesheet-link').append(font_stylesheet_link);
+
+        $('#body-font-family-name-' + store_id).val(family);
+        $('#body-font-family-cate-' + store_id).val(category);
+        $('#body-font-family-link-' + store_id).val(font_css_link);
+
+        $('.font-body-demo-' + store_id).css("font-family", "'" + family + "', " + category);
+    }
+
+    function chooseBodyWeight(value, store_id) {
+        $('.font-body-demo-' + store_id).css("font-weight", value);
+    }
+
+    function chooseHeadingFont(id, store_id) {
+        var family = $("#heading-font-" + id).data('family');
+        var family_val = $("#heading-font-" + id).data('family-val');
+        var variants = $("#heading-font-" + id).data('variants');
+        var subsets = $("#heading-font-" + id).data('subsets');
+        var category = $("#heading-font-" + id).data('category');
+
+        var font_css_link = 'https://fonts.googleapis.com/css?family=' + family_val + ":" + variants + '&subset=' + subsets;
+        var font_stylesheet_link = '<link href="' + font_css_link + '" rel="stylesheet">';
+
+        $('.heading-stylesheet-link').append(font_stylesheet_link);
+
+        $('#heading-font-family-name-' + store_id).val(family);
+        $('#heading-font-family-cate-' + store_id).val(category);
+        $('#heading-font-family-link-' + store_id).val(font_css_link);
+
+        $('.font-heading-demo-' + store_id).css("font-family", "'" + family + "', " + category);
+    }
+
+    function chooseHeadingWeight(value, store_id) {
+        $('.font-heading-demo-' + store_id).css("font-weight", value);
+    }
+</script>
+
+<script type="text/javascript"><!--
+    $('#button-import').on('click', function() {
+
+        $('#form-data input[name=\'file\']').val($('#input-theme').val());
+
+        $('#form-data').submit();
+    });
+    //--></script>
+{{ footer }}

@@ -1,0 +1,198 @@
+{{ header }}{{ column_left }}
+<div id="content">
+    <div class="page-header">
+        <div class="container-fluid">
+            <div class="pull-right">
+                <button type="submit" form="form-menu" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
+                <a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a></div>
+            <h1>{{ heading_title }}</h1>
+            <ul class="breadcrumb">
+                {% for breadcrumb in breadcrumbs %}
+                    <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <div class="container-fluid">
+        {% if error_warning %}
+        <div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+        </div>
+        {% endif %}
+        <div class="theme-option-container">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><i class="fa fa-pencil"></i> {{ text_form }}</h3>
+                </div>
+                <div class="panel-body">
+                    <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-menu" class="form-horizontal">
+                        <div class="frm-left">
+                            <div class="form-group">
+                                <label class="col col-label" for="input-menu-name">{{ entry_menu_name }}</label>
+                                <div class="col col-input">
+                                    <input id="input-menu-name" type="text" name="name" class="form-control" value="{{ name }}" />
+                                    {% if error_name %}
+                                        <div class="text-danger">{{ error_name }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col col-label" for="input-menu-status">{{ entry_status }}</label>
+                                <div class="col col-input">
+                                    <input type="hidden" name="status" value="0" />
+                                    <input type="checkbox" class="ckb-switch" name="status" id="input-menu-status"
+                                           data-toggle="toggle" data-on="{{ text_enabled }}" data-off="{{ text_disabled }}" data-width="100" data-height="36"
+                                            {% if status %} value="1" checked {% else %} value="0" {% endif %}>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col col-label" for="input-menu-type">{{ entry_menu_type }}</label>
+                                <div class="col col-input">
+                                    <select name="menu_type" id="input-menu-type" class="form-control">
+                                        <option value="horizontal" {% if menu_type == 'horizontal' %} selected="selected" {% endif %}>{{ text_horizontal }}</option>
+                                        <option value="vertical" {% if menu_type == 'vertical' %} selected="selected" {% endif %}>{{ text_vertical }}</option>
+                                        <option value="mobile" {% if menu_type == 'mobile' %} selected="selected" {% endif %}>{{ text_mobile }}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="frm-right frm-menu">
+                            <div class="form-group">
+                                <div class="frm-title col-sm-6">{{ text_item_hierarchy }}</div>
+                                <div class="col-sm-6 control-label col-btn">
+                                    <button type="button" class="btn btn-widget btn-delete" onclick="ptmenu.deleteCheckItems()"><i class="fa fa-times"></i></button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="menu_item_container">
+                                    {% if top_items %}
+                                        <div class="top_item_container top_sortable">
+                                            {% set top_count = 0 %}
+                                            {% for top_item in top_items %}
+                                                <div class="top_item_content">
+                                                    <div class="top_item item row">
+                                                        {% if top_item.sub_items %}
+                                                            <a href="#second-content-{{ top_count }}" data-toggle="collapse" class="parent collapsed expand"></a>
+                                                        {% endif %}
+                                                        <div class="del-name">
+                                                            <div class="del-action">
+                                                                <input type="checkbox" class="ck-del top-ck-del" value="{{ top_item.menu_item_id }}" />
+                                                            </div>
+                                                            <div class="name">
+                                                                <span>{{ top_item.name }}</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="action">
+                                                            <a href="javascript:void(0)" title="{{ text_add_sub_item }}" onclick="ptmenu.appendAddSubItemForm('{{ top_item.menu_item_id }}', '2')" class="a-config"><i class="fa fa-plus"></i></a>
+                                                            <a href="javascript:void(0)" onclick="ptmenu.appendTopItemNewForm('{{ top_item.url }}')" class="a-config"><i class="fa fa-pencil"></i></a>
+                                                            <a href="javascript:void(0)" onclick="ptmenu.deleteMenuItem('{{ top_item.del_url }}')" class="a-delete a-config"><i class="fa fa-times"></i></a>
+                                                        </div>
+                                                    </div>
+                                                    {% if top_item.sub_items %}
+                                                        <div class="second_item_container second_sortable collapse" id="second-content-{{ top_count }}">
+                                                            {% set second_count = 0 %}
+                                                            {% for sub_item in top_item.sub_items %}
+                                                                <div class="second_item_content">
+                                                                    <div class="second_item item row">
+                                                                        {% if sub_item.sub_items %}
+                                                                            <a href="#third-content-{{ top_count }}-{{ second_count }}" data-toggle="collapse" class="parent collapsed expand"></a>
+                                                                        {% endif %}
+                                                                        <div class="del-name">
+                                                                            <div class="del-action">
+                                                                                <input type="checkbox" class="ck-del sub-ck-del" value="{{ sub_item.item_id }}" />
+                                                                            </div>
+                                                                            <div class="name">
+                                                                                <span>{{ sub_item.name }}</span>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="action">
+                                                                            <a href="javascript:void(0)" title="{{ text_add_sub_item }}" onclick="ptmenu.appendAddSubItemForm('{{ sub_item.item_id }}', '3')" class="a-config"><i class="fa fa-plus"></i></a>
+                                                                            <a href="javascript:void(0)" onclick="ptmenu.appendEditSubItemForm('{{ sub_item.item_id }}')" class="a-config"><i class="fa fa-pencil"></i></a>
+                                                                            <a href="javascript:void(0)" onclick="ptmenu.deleteMenuItem('{{ sub_item.del_url }}')" class="a-delete a-config"><i class="fa fa-times"></i></a>
+                                                                        </div>
+                                                                    </div>
+                                                                    {% if sub_item.sub_items %}
+                                                                        <div class="third_item_container third_sortable collapse" id="third-content-{{ top_count }}-{{ second_count }}">
+                                                                            {% for s_item in sub_item.sub_items %}
+                                                                                <div class="third_item_content">
+                                                                                    <div class="third_item item row">
+                                                                                        <div class="del-name">
+                                                                                            <div class="del-action">
+                                                                                                <input type="checkbox" class="ck-del sub-ck-del" value="{{ s_item.item_id }}" />
+                                                                                            </div>
+                                                                                            <div class="name">
+                                                                                                <span>{{ s_item.name }}</span>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="action">
+                                                                                            <a href="javascript:void(0)" onclick="ptmenu.appendEditSubItemForm('{{ s_item.item_id }}')" class="a-config"><i class="fa fa-pencil"></i></a>
+                                                                                            <a href="javascript:void(0)" onclick="ptmenu.deleteMenuItem('{{ s_item.del_url }}')" class="a-delete a-config"><i class="fa fa-times"></i></a>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <input type="hidden" class="sub-item-position3" name="sub_item_position3[{{ s_item.item_id }}]" value="{{ s_item.position }}" />
+                                                                                </div>
+                                                                            {% endfor %}
+                                                                        </div>
+                                                                    {% endif %}
+                                                                    <input type="hidden" class="sub-item-position2" name="sub_item_position2[{{ sub_item.item_id }}]" value="{{ sub_item.position }}" />
+                                                                </div>
+                                                                {% set second_count = second_count + 1 %}
+                                                            {% endfor %}
+                                                        </div>
+                                                    {% endif %}
+                                                    <input type="hidden" class="top-item-position" name="top_item_position[{{ top_item.menu_item_id }}]" value="{{ top_item.position }}" />
+                                                </div>
+                                                {% set top_count = top_count + 1 %}
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        <p class="text-center">{{ text_no_items }}</p>
+                                    {% endif %}
+                                </div>
+                                <div class="btn-action">
+                                    <button type="button" class="btn btn-add" onclick="ptmenu.appendTopItemNewForm('{{ top_items_form_url }}')"><i class="fa fa-plus-square"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <input type="hidden" id="sub-item-form-url" value="{{ sub_item_add_form_url }}" />
+                    <input type="hidden" id="sub-item-edit-form-url" value="{{ sub_item_edit_form_url }}" />
+                    <input type="hidden" id="get-top-item-url" value="{{ get_top_items_url }}" />
+                    <input type="hidden" id="multiple-del-url" value="{{ multiple_del_url }}" />
+                    <input type="hidden" id="input-add-sub-item" value="{{ text_add_sub_item }}" />
+                    <input type="hidden" id="text-show-image" value="{{ text_show_image }}" />
+                    <input type="hidden" id="text-show-child" value="{{ text_show_child }}" />
+                    <input type="hidden" id="text-success-item" value="{{ text_success_item }}" />
+                    <input type="hidden" id="text-choose-category" value="{{ text_choose_category }}" />
+                    <input type="hidden" id="text-choose-product" value="{{ text_choose_product }}" />
+                    <input type="hidden" id="text-user-token" value="{{ user_token }}" />
+                    <input type="hidden" id="text-title" value="{{ text_title }}" />
+                    <input type="hidden" id="text-link" value="{{ text_link }}" />
+                    <input type="hidden" id="text-html" value="{{ text_html }}" />
+                    <input type="hidden" id="text-hide-title" value="{{ text_hide_title }}" />
+                    <input type="hidden" id="text-confirm-delete" value="{{ text_confirm_delete }}" />
+                    <input type="hidden" id="text-confirm-multiple-delete" value="{{ text_confirm_multiple_delete }}" />
+                    <input type="hidden" id="text-choose-delete" value="{{ text_choose_delete_items }}" />
+                    <input type="hidden" id="text-no-items" value="{{ text_no_items }}" />
+                    <input type="hidden" id="text-no-children-items" value="{{ text_no_children_items }}" />
+                    <div id="form-container-bg"></div>
+                    <div id="form-ajax-loader"><img src="{{ loader_image }}" class="ajax-loader-img" /></div>
+                    <div id="form-container"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function() {
+        $('.toggle.btn').on('click', function () {
+            var ckb_status = parseInt($(this).find('.ckb-switch').val());
+            if(ckb_status == 1) {
+                $(this).find('.ckb-switch').val('0');
+            } else {
+                $(this).find('.ckb-switch').val('1');
+            }
+        });
+    })
+</script>
+{{ footer }}

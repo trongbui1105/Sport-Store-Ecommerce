@@ -1,0 +1,41 @@
+<div id="ajax-login-block">
+</div>
+<div id="ajax-loader">
+    <img src="{{ loader_img }}" alt="" />
+</div>
+<div class="ajax-body-login">
+    <div class="account-login">
+        <div class="page-title">
+            <h1>{{ title }}</h1>
+            <a href="javascript:void(0);" class="a-close-frm" onclick="ptlogin.closeForm();"><span>Close</span></a>
+        </div>
+        <div class="ajax-content">
+            {{ ajax_login_content }}
+        </div>
+    </div>
+    <div class="account-register">
+        <div class="page-title">
+            <h1>{{ title }}</h1>
+            <a href="javascript:void(0);" class="a-close-frm" onclick="ptlogin.closeForm();"><span>Close</span></a>
+        </div>
+        <div class="ajax-content">
+            {{ ajax_register_content }}
+        </div>
+    </div>
+    <div class="account-success">
+        <div class="ajax-content">
+            {{ ajax_success_content }}
+        </div>
+    </div>
+    <div class="logout-success">
+        <div class="ajax-content">
+            {{ ajax_logoutsuccess_content }}
+        </div>
+    </div>
+</div>
+{% if status %}
+    <input type="hidden" id="quicklogin-status" value="1" />
+{% else %}
+    <input type="hidden" id="quicklogin-status" value="0" />
+{% endif %}
+

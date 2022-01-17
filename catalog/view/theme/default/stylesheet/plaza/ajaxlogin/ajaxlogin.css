@@ -1,0 +1,75 @@
+#ajax-login-block { display: none; background-color : black; height : 100%; opacity : 0.35; position : fixed; top : 0; left: 0; width : 100%; z-index : 900; }
+#ajax-loader { display: none; z-index: 1000; position: fixed; top: 50%; left: 50%; }
+.ajax-load-img { display: none; }
+.ajax-body-login{
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    margin:auto;
+    overflow: auto !important;
+    z-index: 1200;
+    display: none;
+}
+.ajax-body-login .ajax-content{
+    max-height: 500px;
+    overflow: auto;
+}
+/* Login Form */
+.ajax-body-login .account-login { display: none; margin: 30px auto; background-color: #FFFFFF; opacity: 1; position: relative; z-index: 1200; width: 600px; height: auto; padding: 20px;}
+.ajax-body-login .account-login .ajax-content > .ajax-container {}
+.ajax-content > .ajax-container .login-form-content { min-height: 20px;}
+.ajax-content > .ajax-container .login-form-content { margin-right: 0 !important; }
+.ajax-content > .ajax-container .login-form-content { width: 100%; }
+.ajax-content > .ajax-container .form-control {width: 100%;
+border-radius: 0;
+box-shadow: none;
+text-indent: 10px;}
+.ajax-content > .ajax-container .login-form-content .alert { margin-top: 15px; margin-left: 0; }
+
+/* Register Form */
+.ajax-body-login .account-register { display: none; margin: 30px auto; background-color: #FFFFFF; opacity: 1; position: relative; z-index: 1200; width: 700px; padding: 20px;}
+
+.ajax-content > .ajax-container .register-form-content { min-height: 20px;}
+.ajax-content > .ajax-container .alert { margin-bottom: 0; }
+.ajax-content > .ajax-container .form-group { margin-right: 0 !important; }
+.ajax-content > .ajax-container .control-label {
+    padding-top: 0; padding-right: 0 !important; color: #2c2c2c; font-size: 14px; font-weight: normal;
+    line-height:34px;
+}
+.ajax-content > .ajax-container .control-label:after{
+    /*content: "*";*/
+    /*color: #f00;*/
+    /*margin-left: 5px;*/
+}
+.ajax-content > .ajax-container .pull-right { margin-right: 20px; }
+.ajax-content > .ajax-container .for-error { display: none; }
+.ajax-container .success-content button{
+    margin-bottom:20px;
+}
+.ajax-body-login .account-success { display: none; top: 50%; left: 50%; width: 500px; height: auto; margin-top: -150px; margin-left: -250px; background-color: #FFFFFF; opacity: 1; position: fixed; z-index: 1200; }
+.ajax-body-login .account-success .ajax-content > .ajax-container { margin: 15px; }
+
+.ajax-body-login .logout-success { display: none; top: 50%; left: 50%; width: 500px; height: auto; margin-top: -100px; margin-left: -250px; background-color: #FFFFFF; opacity: 1; position: fixed; z-index: 1200; padding: 15px;}
+.a-close-frm{
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: rgb(255, 0, 0);
+}
+.forgotten{
+    float: right;
+    margin-top:15px;
+    color: #92C841;
+    text-transform: capitalize;
+}
+.ajax-content .radio-inline{
+    padding-top: 0
+}
+@media (max-width:767px){
+    .ajax-body-login .account-login,
+    .ajax-body-login .account-register{
+        width: 90%;
+    }
+}

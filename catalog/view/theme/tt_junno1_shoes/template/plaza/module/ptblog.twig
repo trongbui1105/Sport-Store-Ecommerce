@@ -1,0 +1,95 @@
+<div class="blog-module">
+    <div class="block-title">
+        {% if sub_title_blog %}
+			<p class="sub-title">{{ sub_title_blog }}</p>
+		{% endif %}
+		<div class="title">{{ text_heading_title }}</div>
+		{% if text_module_blog %}
+			<p>{{ text_module_blog }}</p>
+		{% endif %}
+    </div>
+	<div class="pt-content">
+		{% if posts %}
+		<div class="swiper-viewport">
+			<div class="swiper-container posts-container">
+				<div class="swiper-wrapper">
+					{% for post in posts %}
+						<div class="post-content swiper-slide product-thumb">
+							<div class="post-grid">
+								<div class="post-item ">
+									<div class="post-image">
+										<a title="{{ post.name }}" href="{{ post.href }}"><img src="{{ post.image }}" alt="{{ post.name }}" /></a>
+									</div>
+									<div class="post-cation">
+										<div class="post-date-author">
+											<span class="post-date">{{ post.date_added }}</span>
+											<span class="post-author">{% if post.author %}{{ post.author }}{% endif %}</span>
+										</div>
+										<h4 class="post-name"><a  href="{{ post.href }}">{{ post.name }}</a></h4>
+										<div class="post-intro">{{ post.intro_text }}</div>
+										
+										<div class="btn-more"><a href="{{ post.href }}">{{ button_show }}</a></div>
+									</div>
+								</div>
+							</div>
+						</div>
+					{% endfor %}
+				</div>
+			</div>
+			{% if slide.pagination %}
+				<div class="swiper-pagination post-pagination"></div>
+			{% endif %}
+
+			{% if slide.navigation %}
+				<div class="swiper-pager">
+					<div class="swiper-button-next blog-button-next"></div>
+					<div class="swiper-button-prev blog-button-prev"></div>
+				</div>
+			{% endif %}
+		</div>
+		{% else %}
+			<p>{{ text_empty }}</p>
+		{% endif %}
+	</div>
+</div>
+{% if posts %}
+    <script >
+        $(".posts-container").swiper({
+            spaceBetween: 0,
+            {% if slide.pagination %}
+            pagination: '.post-pagination',
+            paginationClickable: true,
+            {% endif %}
+            {% if slide.navigation %}
+            nextButton: '.blog-button-next',
+            prevButton: '.blog-button-prev',
+            {% endif %}
+            speed: {% if slide.speed %} {{ slide.speed }} {% else %} 500 {% endif %},
+            slidesPerView: {{ slide.items }},
+            slidesPerColumn: {{ slide.rows }},
+			watchSlidesVisibility: true,
+            autoplay: {% if slide.auto %} 3000 {% else %} false {% endif %},
+            loop: false,
+			// Responsive breakpoints
+			breakpoints: {
+				359: {
+				  slidesPerView: 1
+				},
+				479: {
+				  slidesPerView: 1
+				},
+				767: {
+				  slidesPerView: 2
+				},
+				991: {
+				  slidesPerView: 2
+				  
+				},
+				1199: {
+				  slidesPerView: 3
+				  
+				}
+			}
+        });
+    </script>
+{% endif %}

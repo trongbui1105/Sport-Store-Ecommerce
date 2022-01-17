@@ -1,0 +1,99 @@
+<a class="a-close" onclick="ptmenu.closeForm()"><i class="fa fa-close" aria-hidden="true"></i></a>
+<div class="frm-container">
+    <div class="frm-heading">
+        <h4 class="frm-title">{{ text_item_form }}</h4>
+    </div>
+    <div class="frm-body sub-form-container">
+        {% if error_warning %}
+            <div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+            </div>
+        {% endif %}
+        <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-menu-item" class="form-horizontal">
+            <div class="sub-form-container">
+                <div class="frm-group">
+                    <label class="frm-label col-sm-3" for="input-item-name">{{ entry_item_name }}</label>
+                    <div class="col-sm-6">
+                        <input type="text" id="input-item-name" class="form-control" value="{{ name }}" name="name" />
+                        {% if error_name %}
+                            <div class="text-danger">{{ error_name }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="frm-group">
+                    <label class="frm-label col-sm-3" for="input-status">{{ entry_status }}</label>
+                    <div class="col-sm-3">
+                        <select name="status" id="input-status" class="form-control">
+                            {% if status %}
+                                <option value="1" selected="selected">{{ text_enabled }}</option>
+                                <option value="0">{{ text_disabled }}</option>
+                            {% else %}
+                                <option value="1">{{ text_enabled }}</option>
+                                <option value="0" selected="selected">{{ text_disabled }}</option>
+                            {% endif %}
+                        </select>
+                    </div>
+                </div>
+                <div class="frm-group">
+                    <label class="frm-label col-sm-3" for="input-title">{{ entry_title }}</label>
+                    <div class="col-sm-6">
+                        {% for language in languages %}
+                            <div class="input-group">
+                                <span class="input-group-addon"><img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" /> {{ language.name }}</span>
+                                <input type="text" name="title[{{ language.language_id }}]" value="{{ title[language.language_id] ? title[language.language_id] : '' }}" placeholder="" id="input-title{{ language.language_id }}" class="form-control" />
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="frm-group">
+                    <label class="frm-label col-sm-3" for="input-link">{{ entry_link }}</label>
+                    <div class="col-sm-6">
+                        <select class="form-control link-selection">
+                            {% set flg = 0 %}
+                            {% for mlink in links %}
+                                <option value="{{ mlink.url }}" {% if link == mlink.url %} selected="selected" {% set flg = 1 %} {% endif %}>{{ mlink.label }}</option>
+                            {% endfor %}
+                            <option value="0" {% if flg == 0 %} selected="selected" {% endif %}>{{ text_custom_link }}</option>
+                        </select>
+
+                        <input type="text" id="input-link" name="link" value="{{ link }}" class="form-control" style="margin-top: 10px"/>
+                    </div>
+                </div>
+                <div class="frm-group">
+                    <label class="frm-label col-sm-3" for="input-position">{{ entry_order }}</label>
+                    <div class="col-sm-3">
+                        <input type="text" id="input-position" name="position" value="{{ position }}" class="form-control" />
+                    </div>
+                </div>
+                <div class="frm-group">
+                    <div class="col-sm-3"></div>
+                    <div class="col-sm-6">
+                        <button type="button" onclick="ptmenu.submitSubItemForm({{ menu_id }})" class="btn btn-primary btn-widget btn-sub-item"><i class="fa fa-save"></i> {{ button_save }}</button>
+                    </div>
+                </div>
+            </div>
+            <input type="hidden" id="parent-menu-item-id" name="parent_menu_item_id" value="{{ parent_menu_item_id }}" />
+            <input type="hidden" id="menu_level" name="level" value="{{ level }}" />
+        </form>
+    </div>
+</div>
+<script>
+    $('#input-link').hide();
+    var link = $('.link-selection').val();
+    if (link == '0') {
+        $('#input-link').show();
+    } else {
+        $('#input-link').hide();
+        $('#input-link').val(link);
+    }
+
+    $('.link-selection').change(function () {
+        var link = $(this).val();
+        if (link == '0') {
+            $('#input-link').show();
+        } else {
+            $('#input-link').hide();
+            $('#input-link').val(link);
+        }
+    });
+</script>

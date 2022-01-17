@@ -1,0 +1,156 @@
+{{ header }}
+<ul class="breadcrumb">
+	{% for breadcrumb in breadcrumbs %}
+		<li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+	{% endfor %}
+	<li>{{ heading_title }}</li>
+</ul>
+
+<div class="container">
+    <div class="main">
+        <div class="row">
+            {% if layout == "left" %}
+                <div class="col-md-3 col-xs-12">
+                    {% if related_posts %}
+                        <div class="blog-widget-section blog-widget">
+                            <div class="title">
+                                <h3><span>{{ text_related_post }}</span></h3>
+                            </div>
+                            {% for post in related_posts %}
+                                <div class="widget-content">
+									<a href="{{ post.href }}"><img src="{{ post.image }}" alt="{{ post.name }}" /></a>
+									<div class="latest-post-content">
+										<h5 class="latest-post-name"><a href="{{ post.href }}">{{ post.name }}</a></h5>
+										<div class="post-date">
+                                            {{ post.date_added }}{% if post.author %}{{ " | " ~ post.author }}{% endif %}
+                                        </div>
+										
+									</div>
+								</div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            {% endif %}
+            {% if layout == "left" or layout == "right" %}
+                {% set class = 'col-md-9 col-sm-12 col-xs-12' %}
+            {% else %}
+                {% set class = 'col-xs-12' %}
+            {% endif %}
+            <div id="content" class="{{ class }}">{{ content_top }}
+                <div class="post-container">
+                    <div class="post-title">
+                        <h1>{{ heading_title }}</h1>
+                    </div>
+                    <div class="post-date-author">
+						<span class="post-date">{{ post.date_added }}</span>
+						<span class="post-author">{% if post.author %}{{ post.author }}{% endif %}</span>
+					</div>
+                    <div class="post-description">
+                        <img src="{{ image }}" alt="heading_title" />
+                        <p>{{ description }}</p>
+                    </div>
+                </div>
+                {% if related_posts and layout == "full" %}
+					<div class="blog-widget-section blog-widget blog-widget-slider ">
+						<div class="block-title">
+							<div class="title"><span>{{ text_related_post }}</span></div>
+							
+						</div>
+						<div class="pt-content">
+							<div class="swiper-viewport">
+								<div class="swiper-container posts-container">
+									<div class="swiper-wrapper">
+										{% for post in related_posts %}
+											<div class=" swiper-slide product-thumb ">
+												<div class="post-grid">
+													<div class="post-item ">
+														<div class="post-image">
+															<a href="{{ post.href }}"><img src="{{ post.image_full }}" alt="{{ post.name_full }}" /></a>
+														</div>
+														<div class="post-cation">
+															<div class="post-date-author">
+																<span class="post-date">{{ post.date_added }}</span>
+																<span class="post-author">{% if post.author %}{{ post.author }}{% endif %}</span>
+															</div>
+															<p class="post-name"><a href="{{ post.href }}">{{ post.name_full }}</a></p>
+															<div class="post-intro">{{ post.intro_text }}</div>
+															<div class="btn-more"><a href="{{ post.href }}">{{ button_show }}</a></div>
+														</div>
+													</div>
+												</div>
+											</div>
+										{% endfor %}
+									</div>
+								</div>
+								
+								<!--div class="swiper-pagination post-pagination"></div-->
+								<div class="swiper-pager">
+									<div class="swiper-button-next related-posts-next"></div>
+									<div class="swiper-button-prev related-posts-prev"></div>
+								</div>
+							</div>
+						</div>
+						<script type="text/javascript">
+							$(".posts-container").swiper({
+								spaceBetween: 0,
+								nextButton: '.related-posts-next',
+								prevButton: '.related-posts-prev',
+								speed: 600,
+								slidesPerView: 3,
+								slidesPerColumn: 1,
+								watchSlidesVisibility: true,
+								autoplay: false,
+								loop: false,
+								// Responsive breakpoints
+								breakpoints: {
+									359: {
+									  slidesPerView: 1
+									},
+									479: {
+									  slidesPerView: 2
+									},
+									767: {
+									  slidesPerView: 2
+									},
+									991: {
+									  slidesPerView: 3
+									  
+									},
+									1199: {
+									  slidesPerView: 3
+									  
+									}
+								}
+							});
+						</script>
+					</div>
+                {% endif %}
+            </div>
+            {% if layout == "right" %}
+                <div class="col-md-3 col-xs-12">
+                    {% if related_posts %}
+                        <div class="blog-widget-section blog-widget">
+                            <div class="title">
+                                <h3><span>{{ text_related_post }}</span></h3>
+                            </div>
+                            {% for post in related_posts %}
+                                <div class="widget-content">
+									<a href="{{ post.href }}"><img src="{{ post.image }}" alt="{{ post.name }}" /></a>
+									<div class="latest-post-content">
+										<h5 class="latest-post-name"><a href="{{ post.href }}">{{ post.name }}</a></h5>
+										<div class="post-date">
+                                            {{ post.date_added }}{% if post.author %}{{ " | " ~ post.author }}{% endif %}
+                                        </div>
+										
+									</div>
+								</div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{{ footer }}

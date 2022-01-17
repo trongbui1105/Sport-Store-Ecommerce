@@ -1,0 +1,69 @@
+<div id="instagram_block_home" class="block">
+    <div class="title_block">
+        <h3>{{ heading_title }}</h3>
+    </div>
+    {% if error_connect == false %}
+    <p class="text_error_instagram">{{ text_error }}</p>
+    {% else %}
+
+    {% if slider.view_mode != 'slider' %}
+        <div class="instagram-slides row">
+            {% for instagram in instagrams %}
+                <a class="fancybox col-sm-3" href="{{ instagram.image }}" style="display: block;"><img src="{{ instagram.image }}" alt="" /></a>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {% if slider.view_mode == 'slider' %}
+        <div class="row swiper-viewport">
+            <div class="swiper-container instagram-slides">
+                <div class="swiper-wrapper">
+                    {% for instagram in instagrams %}
+                        <div class="swiper-slide">
+                            <a class="fancybox" href="{{ instagram.image }}" style="display: block;"><img src="{{ instagram.image }}" alt="" /></a>
+                        </div>
+                    {% endfor %}
+                </div>
+                {% if slider.pagination %}
+                    <div class="swiper-pagination instagram-pagination"></div>
+                {% endif %}
+
+                {% if slider.navigation %}
+                    <div class="swiper-pager">
+                        <div class="swiper-button-next"></div>
+                        <div class="swiper-button-prev"></div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <script type="text/javascript">
+            $(".instagram-slides").swiper({
+                spaceBetween: 20,
+                {% if slider.pagination %}
+                pagination: '.instagram-pagination',
+                paginationClickable: true,
+                {% endif %}
+                {% if slider.navigation %}
+                nextButton: '.swiper-button-next',
+                prevButton: '.swiper-button-prev',
+                {% endif %}
+                speed: {% if slider.speed %} {{ slider.speed }} {% else %} 300 {% endif %},
+                slidesPerView: {{ slider.items }},
+                slidesPerColumn: {{ slider.rows }},
+                autoplay: {% if slider.auto %} 3000 {% else %} false {% endif %},
+                loop: false
+            });
+        </script>
+    {% endif %}
+<script type="text/javascript">
+    $('.instagram-slides').magnificPopup({
+        type: 'image',
+        delegate: 'a',
+        gallery: {
+            enabled : true
+        }
+    });
+</script>
+{% endif %}
+</div>

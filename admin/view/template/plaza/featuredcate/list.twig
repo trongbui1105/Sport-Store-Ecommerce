@@ -1,0 +1,123 @@
+{{ header }}{{ column_left }}
+<div id="content">
+    <div class="page-header">
+        <div class="container-fluid">
+            <h1>{{ heading_title }}</h1>
+            <ul class="breadcrumb theme-option-breadcrumb">
+                {% for breadcrumb in breadcrumbs %}
+                    <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <div class="container-fluid">
+        {% if error_warning %}
+            <div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+            </div>
+        {% endif %}
+        {% if success %}
+            <div class="alert alert-success"><i class="fa fa-check-circle"></i> {{ success }}
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+            </div>
+        {% endif %}
+        {% if information %}
+            <div class="alert alert-info"><i class="fa fa-info-circle"></i> {{ information }}
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+            </div>
+        {% endif %}
+        <div class="row">
+            <div class="col-md-3 col-sm-12">
+                <div class="theme-option-container">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">{{ text_dashboard_menu }}</h3>
+                        </div>
+                        <ul class="nav nav-tabs menu-sections pt-dashboard-menu">
+                            {% set i = 0 %}
+                            {% for menu in plaza_menus %}
+                                {% if menu.child %}
+                                    <li {% if menu.active %} class="active" {% endif %}>
+                                        <a href="#ptcollapse_{{ i }}" data-toggle="collapse" class="parent {% if not menu.active %} collapsed {% endif %}">{{ menu.title }}</a>
+                                        <ul id="ptcollapse_{{ i }}" class="collapse {% if menu.active %} in {% endif %}">
+                                            {% for item in menu.child %}
+                                                <li {% if item.active %} class="active" {% endif %}><a href="{{ item.url }}">{{ item.title }}</a></li>
+                                            {% endfor %}
+                                        </ul>
+                                    </li>
+                                {% else %}
+                                    <li {% if menu.active %} class="active" {% endif %}><a href="{{ menu.url }}">{{ menu.title }}</a></li>
+                                {% endif %}
+                                {% set i = i + 1 %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-9 col-sm-12">
+                <div class="theme-option-container">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title"><i class="fa fa-list"></i> {{ text_list }}</h3>
+                        </div>
+                        <div class="panel-body">
+                            <td class="table-responsive">
+                                <table class="table table-bordered table-hover">
+                                    <thead>
+                                    <tr>
+                                        <td class="text-left">{% if sort == 'name' %}
+                                                <a href="{{ sort_name }}" class="{{ order|lower }}">{{ column_name }}</a>
+                                            {% else %}
+                                                <a href="{{ sort_name }}">{{ column_name }}</a>
+                                            {% endif %}</td>
+                                        <td class="text-center">{{ column_featured }}</td>
+                                        <td class="text-center">{{ column_secondary }}</td>
+                                        <td class="text-center">{{ column_alternative }}</td>
+                                        <td class="text-right">{{ column_action }}</td>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% if categories %}
+                                        {% for category in categories %}
+                                            <tr>
+                                                <td class="text-left">{{ category.name }}</td>
+                                                <td class="text-center">
+                                                    {% if category.is_featured == 1 %}
+                                                        <span class="item-status enabled">{{ text_enabled }}</span>
+                                                    {% else %}
+                                                        <span class="item-status disabled">{{ text_disabled }}</span>
+                                                    {% endif %}
+                                                </td>
+                                                <td class="text-center">{% if category.secondary_image %}
+                                                        <img src="{{ category.secondary_image }}" alt="{{ category.name }}" class="img-thumbnail" />
+                                                    {% else %}
+                                                        <span class="img-thumbnail list"><i class="fa fa-camera fa-2x"></i></span>
+                                                    {% endif %}</td>
+                                                <td class="text-center">{% if category.alternative_image %}
+                                                        <img src="{{ category.alternative_image }}" alt="{{ category.name }}" class="img-thumbnail" />
+                                                    {% else %}
+                                                        <span class="img-thumbnail list"><i class="fa fa-camera fa-2x"></i></span>
+                                                    {% endif %}</td>
+                                                <td class="text-right"><a href="{{ category.edit }}" data-toggle="tooltip" title="{{ button_edit }}" class="btn btn-primary"><i class="fa fa-cog"></i></a></td>
+                                            </tr>
+                                        {% endfor %}
+                                    {% else %}
+                                        <tr>
+                                            <td class="text-center" colspan="4">{{ text_no_results }}</td>
+                                        </tr>
+                                    {% endif %}
+                                    </tbody>
+                                </table>
+                        </div>
+                    </div>
+                    <div class="row theme-option-pagination">
+                        <div class="col-sm-6 text-left">{{ pagination }}</div>
+                        <div class="col-sm-6 text-right">{{ results }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+{{ footer }}

@@ -1,0 +1,57 @@
+<div class="blog-container">
+    <div class="blog-title">
+        <h2>{{ text_heading_title }}</h2>
+    </div>
+
+    {% if posts %}
+    <div class="swiper-viewport">
+        <div class="swiper-container posts-container">
+            <div class="swiper-wrapper">
+                {% for post in posts %}
+                    <div class="post-content swiper-slide">
+                        <div class="post-image"><img src="{{ post.image }}" /></div>
+                        <div class="post-date">
+                            {{ post.date_added }}{% if post.author %}{{ " | " ~ post.author }}{% endif %}
+                        </div>
+                        <a class="post-name" href="{{ post.href }}">{{ post.name }}</a>
+                        <div class="post-intro">{{ post.intro_text }}</div>
+                        <div class="btn-more"><a href="{{ post.href }}">{{ button_show }}</a></div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% if slide.pagination %}
+            <div class="swiper-pagination post-pagination"></div>
+        {% endif %}
+
+        {% if slide.navigation %}
+            <div class="swiper-pager">
+                <div class="swiper-button-next"></div>
+                <div class="swiper-button-prev"></div>
+            </div>
+        {% endif %}
+    </div>
+    {% else %}
+        <p>{{ text_empty }}</p>
+    {% endif %}
+</div>
+{% if posts %}
+    <script type="text/javascript">
+        $(".posts-container").swiper({
+            spaceBetween: 20,
+            {% if slide.pagination %}
+            pagination: '.post-pagination',
+            paginationClickable: true,
+            {% endif %}
+            {% if slide.navigation %}
+            nextButton: '.swiper-button-next',
+            prevButton: '.swiper-button-prev',
+            {% endif %}
+            speed: {% if slide.speed %} {{ slide.speed }} {% else %} 500 {% endif %},
+            slidesPerView: {{ slide.items }},
+            slidesPerColumn: {{ slide.rows }},
+            autoplay: {% if slide.auto %} 3000 {% else %} false {% endif %},
+            loop: false
+        });
+    </script>
+{% endif %}

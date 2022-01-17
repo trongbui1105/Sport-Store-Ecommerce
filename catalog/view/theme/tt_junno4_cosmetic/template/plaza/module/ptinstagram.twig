@@ -1,0 +1,87 @@
+<div id="instagram_block_home" class="block">
+    {% if error_connect == false %}
+    <p class="text_error_instagram">{{ text_error }}</p>
+    {% else %}
+
+    {% if slider.view_mode != 'slider' %}
+        <div class="instagram-slides row">
+            {% for instagram in instagrams %}
+                <a class="fancybox" href="{{ instagram.link }}" target="_blank" style="display: block;">
+				<img src="{{ instagram.medium_image }}" alt="{{ instagram.medium_image }}" />
+				<span class="box-cmt">
+					<span class="like-count">{{ instagram.likes }}</span>
+					<span class="comment-count">{{ instagram.comment }}</span>
+				</span>
+				</a>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {% if slider.view_mode == 'slider' %}
+        <div class="row swiper-viewport">
+            <div class="swiper-container instagram-slides">
+                <div class="swiper-wrapper">
+                    {% for instagram in instagrams %}
+                        <div class="swiper-slide">
+                            <a class="fancybox" href="{{ instagram.link }}" target="_blank" style="display: block;">
+							<img src="{{ instagram.medium_image }}" alt="{{ instagram.medium_image }}" />
+							<span class="box-cmt">
+								<span class="like-count">{{ instagram.likes }}</span>
+								<span class="comment-count">{{ instagram.comment }}</span>
+							</span>
+							</a>
+                        </div>
+                    {% endfor %}
+                </div>
+                {% if slider.pagination %}
+                    <div class="swiper-pagination instagram-pagination"></div>
+                {% endif %}
+
+                {% if slider.navigation %}
+                    <div class="swiper-pager">
+                        <div class="swiper-button-next instagram-swiper-button-next"></div>
+                        <div class="swiper-button-prev instagram-swiper-button-prev"></div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <script type="text/javascript">
+            $(".instagram-slides").swiper({
+                spaceBetween: 0,
+                {% if slider.pagination %}
+                pagination: '.instagram-pagination',
+                paginationClickable: true,
+                {% endif %}
+                {% if slider.navigation %}
+                nextButton: '.instagram-swiper-button-next',
+                prevButton: '.instagram-swiper-button-prev',
+                {% endif %}
+                speed: {% if slider.speed %} {{ slider.speed }} {% else %} 300 {% endif %},
+                slidesPerView: {{ slider.items }},
+                slidesPerColumn: {{ slider.rows }},
+                autoplay: {% if slider.auto %} 3000 {% else %} false {% endif %},
+                loop: false,
+				// Responsive breakpoints
+				breakpoints: {
+					479: {
+					  slidesPerView: 3
+					},
+					767: {
+					  slidesPerView: 3
+					},
+					991: {
+					  slidesPerView: 4
+					  
+					},
+					1199: {
+					  slidesPerView: 5
+					  
+					}
+				}
+            });
+        </script>
+    {% endif %}
+	
+{% endif %}
+</div>

@@ -1,0 +1,85 @@
+<div class="testimonial-module">
+    <div class="block-title">
+        <div class="title">{{ title }}</div>
+		{% if text_module_testimonial %}
+			<p>{{ text_module_testimonial }}</p>
+		{% endif %}
+    </div>
+    <div class="swiper-viewport">
+        <div class="swiper-container gallery-thumbs">
+			<div class="swiper-wrapper">
+                {% set i = 0 %}
+				{% for testimonial in testimonials %}
+                    <div class="swiper-slide">
+                        <div class="testimonial-images testimonial-images-{{ i }}">
+                            <a href="javascript:void(0);" onclick="testimonialGoToSlide({{ i }})"><img src="{{ testimonial.image }}" alt="{{ testimonial.customer_name }}"></a>
+                        </div>
+                    </div>
+                    {% set i = i + 1 %}
+                {% endfor %}
+			</div>
+		</div>
+		<div class="swiper-container testimonial-slides gallery-top">
+            <div class="swiper-wrapper">
+                {% for testimonial in testimonials %}
+                    <div class="testimonial-content swiper-slide">
+                        <div class="testimonial-box">
+                            <p>{{ testimonial.content }}</p>
+							<div class="rating">
+								<span class="icon-ratings"><i class="icon-rating icon-rating-x"></i></span>
+								<span class="icon-ratings"><i class="icon-rating icon-rating-x"></i></span>
+								<span class="icon-ratings"><i class="icon-rating icon-rating-x"></i></span>
+								<span class="icon-ratings"><i class="icon-rating icon-rating-x"></i></span>
+								<span class="icon-ratings"><i class="icon-rating icon-rating-x"></i></span>
+							</div>
+							<span class="testimonial-author">{{ testimonial.customer_name }}</span>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% if slide.pagination %}
+            <div class="swiper-pagination testimonial-pagination"></div>
+        {% endif %}
+
+        {% if slide.navigation %}
+            <div class="swiper-pager">
+                <div class="swiper-button-next swiper-testimonial-button-next"></div>
+                <div class="swiper-button-prev swiper-testimonial-button-prev"></div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<script type="text/javascript">
+    var testimonial_slides = $(".testimonial-slides").swiper({
+        spaceBetween: 20,
+        {% if slide.pagination %}
+        pagination: '.testimonial-pagination',
+        paginationClickable: true,
+        {% endif %}
+        {% if slide.navigation %}
+        nextButton: '.swiper-testimonial-button-next',
+        prevButton: '.swiper-testimonial-button-prev',
+        {% endif %}
+        speed: {% if slide.speed %} {{ slide.speed }} {% else %} 300 {% endif %},
+        slidesPerView: 1,
+        slidesPerColumn: 1,
+        autoplay: {% if slide.auto %} 3000 {% else %} false {% endif %},
+        loop: false
+    });
+
+    var testimonial_thumbs = $(".gallery-thumbs").swiper({
+        spaceBetween: 0,
+        slidesPerView: {{ slide.items }},
+        slidesPerColumn: {{ slide.rows }},
+        loop: false,
+    });
+	$('.testimonial-images-1').addClass('active');
+	testimonial_slides.slideTo(1);
+    function testimonialGoToSlide(index) {
+        testimonial_slides.slideTo(index);
+		$('.testimonial-images').removeClass('active');
+		$('.testimonial-images-'+ index).addClass('active');
+    }
+</script>

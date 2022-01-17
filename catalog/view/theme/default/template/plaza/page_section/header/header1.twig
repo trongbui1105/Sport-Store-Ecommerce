@@ -1,0 +1,46 @@
+<nav id="top">
+    <div class="container">
+        {% if header_currency %}
+            {{ currency }}
+        {% endif %}
+        {{ language }}
+        <div id="top-links" class="nav pull-right">
+            <ul class="list-inline">
+                <li><a href="{{ contact }}"><i class="fa fa-phone"></i></a> <span class="hidden-xs hidden-sm hidden-md">{{ telephone }}</span></li>
+                <li class="dropdown"><a href="{{ account }}" title="{{ text_account }}" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> <span class="hidden-xs hidden-sm hidden-md">{{ text_account }}</span> <span class="caret"></span></a>
+                    <ul class="dropdown-menu dropdown-menu-right pt-account">
+                        {% if logged %}
+                            <li><a href="{{ account }}">{{ text_account }}</a></li>
+                            <li><a href="{{ order }}">{{ text_order }}</a></li>
+                            <li><a href="{{ transaction }}">{{ text_transaction }}</a></li>
+                            <li><a href="{{ download }}">{{ text_download }}</a></li>
+                            <li><a id="pt-logout-link" href="{{ logout }}">{{ text_logout }}</a></li>
+                        {% else %}
+                            <li><a id="pt-register-link" href="{{ register }}">{{ text_register }}</a></li>
+                            <li><a id="pt-login-link" href="{{ login }}">{{ text_login }}</a></li>
+                        {% endif %}
+                    </ul>
+                </li>
+                <li><a href="{{ wishlist }}" id="wishlist-total" title="{{ text_wishlist }}"><i class="fa fa-heart"></i> <span class="hidden-xs hidden-sm hidden-md">{{ text_wishlist }}</span></a></li>
+                {% if header_cart %}
+                    <li><a href="{{ shopping_cart }}" title="{{ text_shopping_cart }}"><i class="fa fa-shopping-cart"></i> <span class="hidden-xs hidden-sm hidden-md">{{ text_shopping_cart }}</span></a></li>
+                    <li><a href="{{ checkout }}" title="{{ text_checkout }}"><i class="fa fa-share"></i> <span class="hidden-xs hidden-sm hidden-md">{{ text_checkout }}</span></a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+<header>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-4">
+                <div id="logo">{% if logo %}<a href="{{ home }}"><img src="{{ logo }}" title="{{ name }}" alt="{{ name }}" class="img-responsive" /></a>{% else %}
+                        <h1><a href="{{ home }}">{{ name }}</a></h1>
+                    {% endif %}</div>
+            </div>
+            <div class="col-sm-5">{{ search }}</div>
+            {% if header_cart %}<div class="col-sm-3">{{ cart }}</div>{% endif %}
+        </div>
+    </div>
+    {{ menu }}
+</header>

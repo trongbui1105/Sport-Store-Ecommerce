@@ -1,0 +1,10 @@
+/*cloud zoom */
+.cloud-zoom-lens {border: 3px solid #888;margin: 0px;background-color:#fff;cursor:move;}
+.cloud-zoom-title {position:absolute !important;background-color:#000;color:#fff;padding:3px;width:100%;text-align:center;font-weight:bold;font-size:1rem;top:0px;}
+.cloud-zoom-big {/* border: 1px solid #f1f1f1; */overflow:hidden;border-radius: 5px;-webkit-border-radius: 5px;}
+.cloud-zoom-loading {color:white;background:#222;padding:3px;border:1px solid #000;}
+#product-cloud-zoom {
+    max-width: 100%;
+    height: auto !important;
+    margin: auto;
+}

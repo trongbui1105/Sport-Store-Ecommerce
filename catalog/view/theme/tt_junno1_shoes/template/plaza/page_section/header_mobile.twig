@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<!--[if IE 8 ]><html dir="{{ direction }}" lang="{{ lang }}" class="ie8"><![endif]-->
+<!--[if IE 9 ]><html dir="{{ direction }}" lang="{{ lang }}" class="ie9"><![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!-->
+<html dir="{{ direction }}" lang="{{ lang }}">
+<!--<![endif]-->
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>{{ title }}</title>
+<base href="{{ base }}" />
+{% if description %}
+	<meta name="description" content="{{ description }}" />
+{% endif %}
+{% if keywords %}
+	<meta name="keywords" content="{{ keywords }}" />
+{% endif %}
+<link href="catalog/view/javascript/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen" />
+{% for style in styles %}
+<link href="{{ style.href }}" type="text/css" rel="{{ style.rel }}" media="{{ style.media }}" />
+{% endfor %}
+<link href="catalog/view/javascript/jquery/swiper/css/swiper.min.css" rel="stylesheet" type="text/css" />
+<!-- icon font -->
+<link href="catalog/view/javascript/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+<link href="catalog/view/javascript/ionicons/css/ionicons.css" rel="stylesheet" type="text/css" />
+<link href="catalog/view/javascript/simple-line-icons-master/css/simple-line-icons.css" rel="stylesheet" type="text/css" />
+<!-- end icon font -->
+<link href="catalog/view/javascript/gilroy-font/css/gilroy.css" rel="stylesheet" type="text/css" />
+<!-- end -->
+<link href="catalog/view/theme/tt_junno1_shoes/stylesheet/stylesheet.css" rel="stylesheet">
+<link href="catalog/view/theme/tt_junno1_shoes/stylesheet/plaza/header/header{{ header_layout }}.css" rel="stylesheet">
+<link href="catalog/view/theme/tt_junno1_shoes/stylesheet/plaza/theme.css" rel="stylesheet">
+<script src="catalog/view/javascript/jquery/jquery-2.1.1.min.js" ></script>
+<script src="catalog/view/javascript/jquery/swiper/js/swiper.min.js" ></script>
+{% for script in scripts %}
+<script src="{{ script }}" ></script>
+{% endfor %}
+<script src="catalog/view/javascript/common.js" ></script>
+{% for link in links %}
+<link href="{{ link.href }}" rel="{{ link.rel }}" />
+{% endfor %}
+{% for analytic in analytics %}
+{{ analytic }}
+{% endfor %}
+
+<!-- Sticky Menu -->
+{% if sticky_header %}
+<script >
+ $(document).ready(function () {	
+	var height_box_scroll = $('.scroll-fix').outerHeight(true);
+  $(window).scroll(function () {
+	if ($(this).scrollTop() > 400) {
+		$('.scroll-fix').addClass("scroll-fixed");
+		$('body').css('padding-top',height_box_scroll);
+	} else {
+		$('.scroll-fix').removeClass("scroll-fixed");
+		$('body').css('padding-top',0);
+	}
+  });
+});
+</script>
+{% endif %}
+<!-- Scroll Top -->
+{% if scroll_top %}
+<script>
+$("#back-top").hide();
+$(function () {
+$(window).scroll(function () {
+  if ($(this).scrollTop() > $('body').height()/3) {
+	$('#back-top').fadeIn();
+  } else {
+	$('#back-top').fadeOut();
+  }
+});
+$('#back-top').click(function () {
+  $('body,html').animate({scrollTop: 0}, 800);
+  return false;
+});
+});
+</script>
+{% endif %}
+<!-- Advance -->
+{% if custom_css %}
+<style>
+{{ custom_css }}
+</style>
+{% endif %}
+{% if custom_js %}
+<script>
+{{ custom_js }}
+</script>
+{% endif %}
+<!-- Bootstrap Js -->
+<script src="catalog/view/javascript/bootstrap/js/bootstrap.min.js" ></script>
+</head>
+<body class="{{ class }} mobile-layout">
+<div class="wrapper">
+{% if scroll_top %}
+    <div id="back-top"><i class="ion-chevron-up"></i></div>
+{% endif %}
+<div id="header">
+	<header class="scroll-fix ">
+		<div class="header-middle">
+			<div class="container">
+				<div class="box-inner">
+					<div class="box-inner-inner">
+						<div class="col-logo">
+							{{ position3 }}				
+							<div id="logo">
+							{% if logo %}<a href="{{ home }}"><img src="{{ logo }}" title="{{ name }}" alt="{{ name }}" class="img-responsive" /></a>{% else %}
+							  <h1><a href="{{ home }}">{{ name }}</a></h1>
+							  {% endif %}
+							</div>
+						</div>
+						<div class="col-cart">
+							<div class="inner">
+								<div class="box-setting btn-group">
+									<button class="dropdown-toggle" data-toggle="dropdown"><i class="ion-android-close" aria-hidden="true"></i></button>
+									<ul class="dropdown-menu">
+										<li class="currency">
+										{% if header_currency %}
+										  {{ currency }}
+										{% endif %}
+										</li>
+										<li class="language">
+										{{ language }}
+										</li>
+										<li id="top-links">
+										  <ul class="list-inline">
+											<li class="dropdown"><a href="{{ account }}" title="{{ text_account }}" ><i class="fa fa-user"></i><span>{{ text_account }}</span><i class="icon-right ion-chevron-down"></i></a>
+											  <ul class="dropdown-menu-right pt-account">
+												{% if logged %}
+												<li><a href="{{ account }}">{{ text_account }}</a></li>
+												<li><a href="{{ order }}">{{ text_order }}</a></li>
+												<li><a href="{{ transaction }}">{{ text_transaction }}</a></li>
+												<li><a href="{{ download }}">{{ text_download }}</a></li>
+												<li><a id="pt-logout-link" href="{{ logout }}">{{ text_logout }}</a></li>
+												{% else %}
+												<li><a id="pt-register-link" href="{{ register }}">{{ text_register }}</a></li>
+												<li><a id="pt-login-link" href="{{ login }}">{{ text_login }}</a></li>
+												{% endif %}
+											  </ul>
+											</li>
+										  </ul>
+										</li>
+										
+										<li ><p><i class="icon-call-in icons"></i><span>{{ telephone }}</span></p></li>
+										<li><p><i class="icon-envelope icons"></i><span>{{ email }}<span></p></li>
+										
+										<!--li><a href="{{ shopping_cart }}" title="{{ text_shopping_cart }}"><i class="fa fa-shopping-cart"></i> <span>{{ text_shopping_cart }}</span></a></li>
+										<li><a href="{{ checkout }}" title="{{ text_checkout }}"><i class="fa fa-share"></i> <span>{{ text_checkout }}</span></a></li>
+										<li><a href="{{ contact }}" ><span>{{ text_hot_line }} {{ telephone }}</span></a></li-->
+									</ul>
+								</div>
+								<a href="{{ wishlist }}" id="wishlist-total" ><span>{{ text_wishlist }}</span></a>
+								{% if header_cart %}{{ cart }}{% endif %}
+							</div>
+						</div>
+						
+					</div>
+					<div class="col-search">{{ search }}</div>
+				</div>
+				
+			</div>
+		</div>
+	</header>
+</div>
